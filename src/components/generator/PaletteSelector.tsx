@@ -56,96 +56,106 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
         <div className="space-y-3">
             {/* Uniform Header Bar */}
             <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Color Palette</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-zinc-300">Color Palette</span>
 
-                <div className="flex items-center gap-1.5">
-                    {/* Custom Edit Color Toggle Button */}
-                    <button
-                        onClick={() => setShowColorEditor(!showColorEditor)}
-                        className={`p-1 rounded-lg border text-[11px] transition-all active:scale-95 ${
-                            showColorEditor
-                                ? "bg-blue-600/20 border-blue-500 text-blue-400 font-medium"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200"
-                        }`}
-                        title="Edit Custom Colors"
-                    >
-                        <Pipette className="w-3.5 h-3.5" />
-                    </button>
+        <div className="flex items-center gap-1.5">
+          {/* Custom Edit Color Toggle Button */}
+          <button
+            onClick={() => setShowColorEditor(!showColorEditor)}
+            aria-label="Edit custom colors"
+            className={`p-2 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-lg border text-xs transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              showColorEditor
+                ? "bg-blue-600/20 border-blue-500 text-blue-400 font-medium"
+                : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-zinc-100"
+            }`}
+            title="Edit Custom Colors"
+          >
+            <Pipette className="w-4 h-4" />
+          </button>
 
-                    {/* Light / Dark Mode Segmented Filter */}
-                    <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-0.5 text-[11px] text-zinc-400">
-                        <button
-                            onClick={() => setFilterMode("all")}
-                            className={`px-2 py-0.5 rounded-md transition-all ${
-                                filterMode === "all" ? "bg-zinc-800 text-white font-medium" : "hover:text-zinc-200"
-                            }`}
-                        >
-                            All
-                        </button>
-                        <button
-                            onClick={() => setFilterMode("dark")}
-                            className={`p-1 rounded-md transition-all ${
-                                filterMode === "dark" ? "bg-zinc-800 text-white" : "hover:text-zinc-200"
-                            }`}
-                            title="Dark Mode Palettes"
-                        >
-                            <Moon className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                            onClick={() => setFilterMode("light")}
-                            className={`p-1 rounded-md transition-all ${
-                                filterMode === "light" ? "bg-zinc-800 text-white" : "hover:text-zinc-200"
-                            }`}
-                            title="Light Mode Palettes"
-                        >
-                            <Sun className="w-3.5 h-3.5" />
-                        </button>
-                    </div>
+          {/* Light / Dark Mode Segmented Filter */}
+          <div role="group" aria-label="Palette mode filter" className="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-0.5 text-xs text-zinc-300">
+            <button
+              onClick={() => setFilterMode("all")}
+              aria-label="Show all palettes"
+              aria-pressed={filterMode === "all"}
+              className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                filterMode === "all" ? "bg-zinc-800 text-white font-medium" : "hover:text-zinc-100"
+              }`}
+            >
+              All
+            </button>
+            <button
+              onClick={() => setFilterMode("dark")}
+              aria-label="Filter dark mode palettes"
+              aria-pressed={filterMode === "dark"}
+              className={`p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                filterMode === "dark" ? "bg-zinc-800 text-white" : "hover:text-zinc-100"
+              }`}
+              title="Dark Mode Palettes"
+            >
+              <Moon className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => setFilterMode("light")}
+              aria-label="Filter light mode palettes"
+              aria-pressed={filterMode === "light"}
+              className={`p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                filterMode === "light" ? "bg-zinc-800 text-white" : "hover:text-zinc-100"
+              }`}
+              title="Light Mode Palettes"
+            >
+              <Sun className="w-3.5 h-3.5" />
+            </button>
+          </div>
 
-                    {/* Shuffle Button */}
-                    <button
-                        onClick={handleShuffle}
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-[11px] font-medium border border-zinc-800 transition-all active:scale-95 shadow-sm"
-                        title="Pick a random palette (different from current)"
-                    >
-                        <Shuffle className="w-3.5 h-3.5 text-blue-400" />
-                        <span className="hidden sm:inline">Randomize</span>
-                    </button>
-                </div>
+          {/* Shuffle Button */}
+          <button
+            onClick={handleShuffle}
+            aria-label="Pick a random palette"
+            className="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs font-medium border border-zinc-800 transition-all active:scale-95 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            title="Pick a random palette (different from current)"
+          >
+            <Shuffle className="w-3.5 h-3.5 text-blue-400" />
+            <span className="hidden sm:inline">Randomize</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Custom Color Inputs Bar */}
+      {showColorEditor && (
+        <div className="p-3 bg-zinc-900/90 border border-zinc-800 rounded-xl space-y-2 animate-in fade-in duration-150">
+          <div className="text-xs font-semibold text-zinc-200 flex items-center justify-between">
+            <span>Customize Active Swatches</span>
+            <span className="text-xs text-blue-400 font-mono">{selectedPalette.name}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] text-zinc-300 uppercase font-mono mb-1">BG</span>
+              <input
+                type="color"
+                value={selectedPalette.background}
+                aria-label="Custom background color"
+                onChange={(e) => handleColorChange(-1, e.target.value)}
+                className="w-9 h-9 rounded-lg border border-zinc-700 bg-transparent cursor-pointer overflow-hidden p-0"
+              />
             </div>
-
-            {/* Custom Color Inputs Bar */}
-            {showColorEditor && (
-                <div className="p-3 bg-zinc-900/90 border border-zinc-800 rounded-xl space-y-2 animate-in fade-in duration-150">
-                    <div className="text-xs font-semibold text-zinc-300 flex items-center justify-between">
-                        <span>Customize Active Swatches</span>
-                        <span className="text-[10px] text-blue-400 font-mono">{selectedPalette.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="flex flex-col items-center">
-                            <span className="text-[9px] text-zinc-400 uppercase font-mono mb-1">BG</span>
-                            <input
-                                type="color"
-                                value={selectedPalette.background}
-                                onChange={(e) => handleColorChange(-1, e.target.value)}
-                                className="w-7 h-7 rounded-lg border border-zinc-700 bg-transparent cursor-pointer overflow-hidden"
-                            />
-                        </div>
-                        <div className="h-6 w-px bg-zinc-800 mx-1" />
-                        {selectedPalette.colors.map((col, idx) => (
-                            <div key={idx} className="flex flex-col items-center">
-                                <span className="text-[9px] text-zinc-400 font-mono mb-1">C{idx + 1}</span>
-                                <input
-                                    type="color"
-                                    value={col}
-                                    onChange={(e) => handleColorChange(idx, e.target.value)}
-                                    className="w-7 h-7 rounded-lg border border-zinc-700 bg-transparent cursor-pointer overflow-hidden"
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
+            <div className="h-6 w-px bg-zinc-800 mx-1" />
+            {selectedPalette.colors.map((col, idx) => (
+              <div key={idx} className="flex flex-col items-center">
+                <span className="text-[10px] text-zinc-300 font-mono mb-1">C{idx + 1}</span>
+                <input
+                  type="color"
+                  value={col}
+                  aria-label={`Custom color ${idx + 1}`}
+                  onChange={(e) => handleColorChange(idx, e.target.value)}
+                  className="w-9 h-9 rounded-lg border border-zinc-700 bg-transparent cursor-pointer overflow-hidden p-0"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
             {/* Uniform Palette Swatch Grid */}
             <div className="grid grid-cols-2 gap-2">

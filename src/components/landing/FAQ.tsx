@@ -48,18 +48,27 @@ export const FAQ: React.FC = () => {
             >
               <button
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
-                className="w-full p-5 text-left flex items-center justify-between font-bold text-sm sm:text-base text-zinc-200 hover:text-white transition-colors"
+                aria-expanded={isOpen}
+                aria-controls={`faq-answer-${idx}`}
+                id={`faq-button-${idx}`}
+                className="w-full p-5 text-left flex items-center justify-between font-bold text-sm sm:text-base text-zinc-200 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
               >
                 <span>{item.question}</span>
                 <ChevronDown
                   className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${
                     isOpen ? 'rotate-180 text-blue-400' : ''
                   }`}
+                  aria-hidden="true"
                 />
               </button>
 
               {isOpen && (
-                <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-zinc-400 leading-relaxed border-t border-zinc-800/40">
+                <div
+                  id={`faq-answer-${idx}`}
+                  role="region"
+                  aria-labelledby={`faq-button-${idx}`}
+                  className="px-5 pb-5 pt-1 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-zinc-800/40"
+                >
                   {item.answer}
                 </div>
               )}

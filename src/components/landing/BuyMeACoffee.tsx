@@ -24,16 +24,16 @@ export const BuyMeACoffeeSection: React.FC = () => {
             href="https://buymeacoffee.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-sm bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-xl shadow-amber-500/20 transition-all active:scale-[0.98]"
+            className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-sm bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-xl shadow-amber-500/20 hover:shadow-amber-500/35 hover:-translate-y-1 transition-all duration-200 ease-out active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 motion-reduce:transform-none"
           >
-            <Coffee className="w-5 h-5 text-zinc-950 fill-zinc-950" />
+            <Coffee className="w-5 h-5 text-zinc-950 fill-zinc-950 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300 ease-out motion-reduce:transform-none" />
             <span>Buy Me a Coffee</span>
-            <ExternalLink className="w-4 h-4 ml-1 opacity-70" />
+            <ExternalLink className="w-4 h-4 ml-1 opacity-80 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform duration-200 motion-reduce:transform-none" />
           </a>
         </div>
 
-        <div className="mt-6 flex items-center gap-2 text-xs font-medium text-amber-400/80">
-          <Heart className="w-3.5 h-3.5 fill-amber-400" />
+        <div className="mt-6 flex items-center gap-2 text-xs font-medium text-amber-400/90 group">
+          <Heart className="w-3.5 h-3.5 fill-amber-400 group-hover:scale-125 transition-transform duration-300 motion-reduce:transform-none" />
           <span>Thank you for supporting independent open tools!</span>
         </div>
       </div>

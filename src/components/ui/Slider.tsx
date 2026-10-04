@@ -35,23 +35,24 @@ export const Slider: React.FC<SliderProps> = ({
           {onToggleLock && (
             <button
               onClick={onToggleLock}
-              className={`p-1 rounded-md transition-all active:scale-95 ${
+              aria-label={isLocked ? `Unlock ${label} parameter` : `Lock ${label} parameter from randomizing`}
+              className={`p-2 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-lg transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 isLocked
                   ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-sm'
-                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
               }`}
               title={isLocked ? 'Unlock slider value' : 'Lock slider value from randomizing'}
             >
-              {isLocked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
+              {isLocked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
             </button>
           )}
-          <span className={`text-[11px] font-medium ${isLocked ? 'text-amber-300 font-semibold' : 'text-zinc-400'}`}>
+          <span className={`text-xs font-medium ${isLocked ? 'text-amber-300 font-semibold' : 'text-zinc-300'}`}>
             {label}
           </span>
         </div>
 
         <span
-          className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md border ${
+          className={`text-xs font-mono font-semibold px-2 py-0.5 rounded-md border ${
             isLocked
               ? 'text-amber-400 bg-amber-500/10 border-amber-500/30'
               : 'text-zinc-200 bg-zinc-800 border-zinc-700/60'
@@ -61,10 +62,10 @@ export const Slider: React.FC<SliderProps> = ({
         </span>
       </div>
 
-      <div className="relative h-6 flex items-center group">
-        <div className="absolute inset-x-0 h-1.5 rounded-full bg-zinc-800 border border-zinc-700/40" />
+      <div className="relative h-8 flex items-center group touch-none">
+        <div className="absolute inset-x-0 h-2 rounded-full bg-zinc-800 border border-zinc-700/40" />
         <div
-          className={`absolute left-0 h-1.5 rounded-full transition-all duration-75 ${
+          className={`absolute left-0 h-2 rounded-full transition-all duration-75 ${
             isLocked ? 'bg-amber-500' : 'bg-blue-600'
           }`}
           style={{ width: `${percentage}%` }}
@@ -75,14 +76,15 @@ export const Slider: React.FC<SliderProps> = ({
           max={max}
           step={step}
           value={value}
+          aria-label={`${label} slider, current value ${displayValue}`}
           onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="absolute inset-x-0 w-full h-6 opacity-0 cursor-pointer z-10"
+          className="absolute inset-x-0 w-full h-8 opacity-0 cursor-pointer z-10"
         />
         <div
-          className={`absolute w-4 h-4 rounded-full bg-white border-2 shadow-md transition-all duration-75 pointer-events-none group-hover:scale-110 ${
+          className={`absolute w-5 h-5 rounded-full bg-white border-2 shadow-md transition-all duration-75 pointer-events-none group-hover:scale-110 ${
             isLocked ? 'border-amber-500 shadow-amber-500/30' : 'border-blue-600 shadow-blue-600/20'
           }`}
-          style={{ left: `calc(${percentage}% - 8px)` }}
+          style={{ left: `calc(${percentage}% - 10px)` }}
         />
       </div>
     </div>

@@ -64,7 +64,7 @@ export const Gallery: React.FC = () => {
 
         <Link
           href="/generate"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-all self-start md:self-auto"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-all self-start md:self-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
           <span>Open Generator App</span>
           <ArrowRight className="w-4 h-4" />
@@ -76,31 +76,33 @@ export const Gallery: React.FC = () => {
           <Link
             key={idx}
             href={`/generate`}
-            className="group rounded-2xl p-4 bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 transition-all hover:bg-zinc-900 flex flex-col justify-between"
+            aria-label={`Open studio with ${item.title} preset using ${item.pattern.name} pattern and ${item.palette.name} palette`}
+            className="group rounded-2xl p-4 bg-zinc-900/60 border border-zinc-800 hover:border-blue-500/40 hover:bg-zinc-900/90 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 ease-out active:scale-[0.98] flex flex-col justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 motion-reduce:transform-none"
           >
             {/* Visual Swatch Card */}
             <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-800/80 mb-4 bg-zinc-950 flex items-center justify-center p-4">
               <div
-                className="absolute inset-0 opacity-80 group-hover:scale-105 transition-transform duration-300"
+                aria-hidden="true"
+                className="absolute inset-0 opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-500 ease-out motion-reduce:transform-none"
                 style={{
                   background: `linear-gradient(135deg, ${item.palette.background} 0%, ${item.palette.colors[0]} 50%, ${item.palette.colors[1]} 100%)`,
                 }}
               />
-              <div className="relative z-10 font-bold text-xs text-white bg-zinc-950/80 px-3 py-1.5 rounded-lg border border-zinc-800 backdrop-blur-md shadow-lg">
+              <div className="relative z-10 font-bold text-xs text-white bg-zinc-950/80 px-3 py-1.5 rounded-lg border border-zinc-800/80 backdrop-blur-md shadow-lg group-hover:border-zinc-700 group-hover:scale-105 transition-all duration-200 motion-reduce:transform-none">
                 {item.pattern.name}
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-sm text-zinc-200 group-hover:text-blue-400 transition-colors">
+                <h3 className="font-bold text-sm text-zinc-200 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all duration-200 ease-out motion-reduce:transform-none">
                   {item.title}
                 </h3>
-                <span className="text-[10px] text-zinc-500 font-mono mt-0.5 block">
+                <span className="text-xs text-zinc-400 font-mono mt-0.5 block">
                   {item.palette.name} Palette
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded-md border border-zinc-700/50">
+              <span className="text-xs font-mono text-zinc-300 bg-zinc-800/80 group-hover:bg-blue-600/20 group-hover:text-blue-300 group-hover:border-blue-500/40 px-2 py-0.5 rounded-md border border-zinc-700/50 transition-all duration-200">
                 {item.tag}
               </span>
             </div>

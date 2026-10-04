@@ -64,8 +64,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       canvas.height = ph;
     }
 
-    renderWallpaper(ctx, pw, ph, patternId, palette, params);
-
     const animId = requestAnimationFrame(() => {
       renderWallpaper(ctx, pw, ph, patternId, palette, params);
     });
@@ -81,35 +79,37 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     <div className="relative flex-1 flex flex-col items-center justify-center bg-zinc-950/60 overflow-hidden min-h-[400px]">
       {/* Top Floating Glass Bar */}
       <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-20">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900/90 border border-zinc-800 text-[11px] font-mono text-zinc-400 backdrop-blur-md">
-          <span className="text-zinc-200">{targetWidth}×{targetHeight}</span>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900/90 border border-zinc-800 text-xs font-mono text-zinc-300 backdrop-blur-md">
+          <span className="text-zinc-100">{targetWidth}×{targetHeight}</span>
           <span className="text-zinc-600">•</span>
-          <span className="text-blue-400">
+          <span className="text-blue-400 font-semibold">
             {aspectRatio > 1.2 ? 'Landscape' : aspectRatio < 0.8 ? 'Portrait' : 'Square'}
           </span>
         </div>
 
-        <div className="flex items-center bg-zinc-900/90 border border-zinc-800 rounded-lg p-0.5 text-[11px] text-zinc-400 backdrop-blur-md">
+        <div role="group" aria-label="Device preview frame selector" className="flex items-center bg-zinc-900/90 border border-zinc-800 rounded-lg p-0.5 text-xs text-zinc-300 backdrop-blur-md">
           {(['none', 'desktop', 'mobile'] as const).map((f) => (
             <button
               key={f}
               onClick={() => handleFrameClick(f)}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-all font-medium ${
+              aria-label={`Preview frame: ${f}`}
+              aria-pressed={deviceFrame === f}
+              className={`flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-md transition-all font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 deviceFrame === f
                   ? 'bg-blue-600 text-white shadow-sm'
-                  : 'hover:text-zinc-200 hover:bg-zinc-800/60'
+                  : 'hover:text-zinc-100 hover:bg-zinc-800/60'
               }`}
             >
               {f === 'none' ? (
                 'Raw'
               ) : f === 'desktop' ? (
                 <>
-                  <Monitor className="w-3 h-3" />
+                  <Monitor className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Desktop</span>
                 </>
               ) : (
                 <>
-                  <Smartphone className="w-3 h-3" />
+                  <Smartphone className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Mobile</span>
                 </>
               )}
@@ -172,7 +172,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
                 }`}
               >
                 <div className="text-2xl font-bold tracking-tight">{time}</div>
-                <div className={`text-[10px] font-medium ${isLightBg ? 'text-zinc-700' : 'text-white/80'}`}>
+                <div className={`text-xs font-medium ${isLightBg ? 'text-zinc-700' : 'text-white/80'}`}>
                   {date}
                 </div>
               </div>
@@ -187,7 +187,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
                     : 'text-white/95 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'
                 }`}
               >
-                <div className={`text-[9px] font-semibold uppercase tracking-widest mb-0.5 ${isLightBg ? 'text-zinc-700' : 'text-white/70'}`}>
+                <div className={`text-[10px] font-semibold uppercase tracking-widest mb-0.5 ${isLightBg ? 'text-zinc-700' : 'text-white/70'}`}>
                   {date}
                 </div>
                 <div className="text-3xl font-extrabold tracking-tight">{time}</div>
@@ -206,6 +206,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             {/* Single Persistent Canvas */}
             <canvas
               ref={canvasRef}
+              role="img"
+              aria-label={`Wallpaper canvas preview displaying ${patternId} pattern with ${palette.name} palette at ${targetWidth} by ${targetHeight} pixels`}
               className={`block object-contain transition-all duration-150 ${
                 deviceFrame === 'desktop'
                   ? 'max-h-[50vh] max-w-[75vw]'

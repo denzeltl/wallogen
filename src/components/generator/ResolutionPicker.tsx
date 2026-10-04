@@ -40,32 +40,38 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
     <div className="space-y-3">
       {/* Uniform Header Bar */}
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+        <span className="text-xs font-bold uppercase tracking-wider text-zinc-300">
           Target Screen Size
         </span>
 
         {/* Segmented Filter Pills */}
-        <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-0.5 text-[11px] text-zinc-400">
+        <div role="group" aria-label="Device preset filter" className="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-0.5 text-xs text-zinc-300">
           <button
             onClick={() => setActiveTab('desktop')}
-            className={`px-2 py-0.5 rounded-md transition-all ${
-              activeTab === 'desktop' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-200'
+            aria-label="Show desktop presets"
+            aria-pressed={activeTab === 'desktop'}
+            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              activeTab === 'desktop' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-100'
             }`}
           >
             Desktop
           </button>
           <button
             onClick={() => setActiveTab('mobile')}
-            className={`px-2 py-0.5 rounded-md transition-all ${
-              activeTab === 'mobile' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-200'
+            aria-label="Show mobile presets"
+            aria-pressed={activeTab === 'mobile'}
+            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              activeTab === 'mobile' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-100'
             }`}
           >
             Mobile
           </button>
           <button
             onClick={() => setActiveTab('all')}
-            className={`px-2 py-0.5 rounded-md transition-all ${
-              activeTab === 'all' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-200'
+            aria-label="Show all resolution presets"
+            aria-pressed={activeTab === 'all'}
+            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              activeTab === 'all' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-100'
             }`}
           >
             All
@@ -83,23 +89,24 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
             <button
               key={preset.id}
               onClick={() => onSelectPreset(preset.id)}
-              className={`flex items-center justify-between p-2.5 rounded-xl border text-left transition-all active:scale-[0.98] ${
+              aria-label={`Select ${preset.name} (${preset.width} by ${preset.height} pixels)`}
+              className={`flex items-center justify-between p-2.5 min-h-[48px] rounded-xl border text-left transition-all active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                 isSelected
                   ? 'bg-blue-600/15 border-blue-500/70 text-white shadow-md shadow-blue-500/10 ring-1 ring-blue-500/30'
-                  : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/80 hover:border-zinc-700'
+                  : 'bg-zinc-900/60 border-zinc-800 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 hover:border-zinc-700'
               }`}
             >
               <div className="flex items-center gap-2 overflow-hidden">
                 <div
                   className={`p-1.5 rounded-lg shrink-0 ${
-                    isSelected ? 'bg-blue-600 text-white shadow-sm' : 'bg-zinc-800 text-zinc-400'
+                    isSelected ? 'bg-blue-600 text-white shadow-sm' : 'bg-zinc-800 text-zinc-300'
                   }`}
                 >
                   {icon}
                 </div>
                 <div className="overflow-hidden">
-                  <div className="font-semibold text-xs text-zinc-200 truncate">{preset.name}</div>
-                  <div className="text-[10px] text-zinc-400 font-mono">
+                  <div className="font-semibold text-xs text-zinc-100 truncate">{preset.name}</div>
+                  <div className="text-xs text-zinc-400 font-mono">
                     {preset.id === 'custom'
                       ? `${customWidth}×${customHeight}`
                       : `${preset.width}×${preset.height}`}

@@ -129,10 +129,11 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                 <div className="flex items-center gap-1.5">
                     <button
                         onClick={handleSurpriseMe}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold shadow-md shadow-blue-600/20 transition-all active:scale-95"
+                        aria-label="Surprise Me: Randomize Pattern, Palette & Parameters"
+                        className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-200 ease-out active:scale-[0.96] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 motion-reduce:transform-none"
                         title="Surprise Me: Randomize Pattern, Palette & Parameters"
                     >
-                        <Dices className="w-3.5 h-3.5" />
+                        <Dices className="w-4 h-4 group-hover:rotate-180 group-hover:scale-110 transition-transform duration-500 ease-out motion-reduce:transform-none" />
                         <span>Surprise Me</span>
                     </button>
                 </div>
@@ -140,77 +141,94 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
 
             {/* Top Segmented Icon Tab Switcher */}
             <div className="px-3 py-2 border-b border-zinc-800/80 bg-zinc-900/40 shrink-0">
-                <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-900/90 rounded-xl border border-zinc-800/80 text-xs">
+                <div role="tablist" aria-label="Generator controls sections" className="grid grid-cols-4 gap-1 p-1 bg-zinc-900/90 rounded-xl border border-zinc-800/80 text-xs">
                     <button
+                        id="tab-patterns"
+                        role="tab"
+                        aria-selected={activeTab === "patterns"}
+                        aria-controls="tabpanel-patterns"
                         onClick={() => setActiveTab("patterns")}
-                        className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg font-medium transition-all ${
+                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                             activeTab === "patterns"
                                 ? "bg-blue-600 text-white shadow-sm font-semibold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <Layers className="w-3.5 h-3.5" />
-                        <span className="text-[11px]">Patterns</span>
+                        <Layers className="w-4 h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
+                        <span className="text-xs">Patterns</span>
                     </button>
 
                     <button
+                        id="tab-tuning"
+                        role="tab"
+                        aria-selected={activeTab === "tuning"}
+                        aria-controls="tabpanel-tuning"
                         onClick={() => setActiveTab("tuning")}
-                        className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg font-medium transition-all ${
+                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                             activeTab === "tuning"
                                 ? "bg-blue-600 text-white shadow-sm font-semibold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <Sliders className="w-3.5 h-3.5" />
-                        <span className="text-[11px]">Tuning</span>
+                        <Sliders className="w-4 h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
+                        <span className="text-xs">Tuning</span>
                     </button>
 
                     <button
+                        id="tab-colors"
+                        role="tab"
+                        aria-selected={activeTab === "colors"}
+                        aria-controls="tabpanel-colors"
                         onClick={() => setActiveTab("colors")}
-                        className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg font-medium transition-all ${
+                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                             activeTab === "colors"
                                 ? "bg-blue-600 text-white shadow-sm font-semibold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <PaletteIcon className="w-3.5 h-3.5" />
-                        <span className="text-[11px]">Colors</span>
+                        <PaletteIcon className="w-4 h-4 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300 motion-reduce:transform-none" />
+                        <span className="text-xs">Colors</span>
                     </button>
 
                     <button
+                        id="tab-screen"
+                        role="tab"
+                        aria-selected={activeTab === "screen"}
+                        aria-controls="tabpanel-screen"
                         onClick={() => setActiveTab("screen")}
-                        className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg font-medium transition-all ${
+                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                             activeTab === "screen"
                                 ? "bg-blue-600 text-white shadow-sm font-semibold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <Monitor className="w-3.5 h-3.5" />
-                        <span className="text-[11px]">Screen</span>
+                        <Monitor className="w-4 h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
+                        <span className="text-xs">Screen</span>
                     </button>
                 </div>
             </div>
 
             {/* Tab Panel Content Body */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto p-4 space-y-4">
                 {activeTab === "patterns" && (
-                    <div className="space-y-3 animate-in fade-in duration-200">
+                    <div id="tabpanel-patterns" role="tabpanel" aria-labelledby="tab-patterns" className="space-y-3 animate-in fade-in duration-200">
                         <PatternPicker selectedPatternId={patternId} onSelectPattern={onSelectPattern} />
                     </div>
                 )}
 
                 {activeTab === "tuning" && (
-                    <div className="space-y-4 animate-in fade-in duration-200">
+                    <div id="tabpanel-tuning" role="tabpanel" aria-labelledby="tab-tuning" className="space-y-4 animate-in fade-in duration-200">
                         <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                            <span className="text-xs font-bold uppercase tracking-wider text-zinc-300">
                                 Pattern Parameters
                             </span>
                             <button
                                 onClick={handleRandomizeSlidersOnly}
-                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-[11px] font-medium border border-zinc-800 transition-all active:scale-95 shadow-sm"
+                                aria-label="Randomize unlocked sliders"
+                                className="group flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs font-medium border border-zinc-800 hover:border-blue-500/30 transition-all duration-200 active:scale-95 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 motion-reduce:transform-none"
                                 title="Randomize unlocked sliders"
                             >
-                                <Shuffle className="w-3.5 h-3.5 text-blue-400" />
+                                <Shuffle className="w-3.5 h-3.5 text-blue-400 group-hover:rotate-180 transition-transform duration-500 ease-out motion-reduce:transform-none" />
                                 <span>Randomize</span>
                             </button>
                         </div>
@@ -287,13 +305,13 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                 )}
 
                 {activeTab === "colors" && (
-                    <div className="animate-in fade-in duration-200">
+                    <div id="tabpanel-colors" role="tabpanel" aria-labelledby="tab-colors" className="animate-in fade-in duration-200">
                         <PaletteSelector selectedPalette={palette} onSelectPalette={onSelectPalette} />
                     </div>
                 )}
 
                 {activeTab === "screen" && (
-                    <div className="animate-in fade-in duration-200">
+                    <div id="tabpanel-screen" role="tabpanel" aria-labelledby="tab-screen" className="animate-in fade-in duration-200">
                         <ResolutionPicker
                             selectedPresetId={selectedPresetId}
                             customWidth={customWidth}
@@ -308,15 +326,16 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
             {/* Sticky Export Footer */}
             <div className="px-4 py-3 border-t border-zinc-800/80 bg-zinc-950 shrink-0 space-y-2.5">
                 <div className="flex items-center justify-between text-xs">
-                    <span className="text-zinc-400 font-medium">Export Specification</span>
+                    <span className="text-zinc-300 font-medium">Export Specification</span>
                     <div className="flex items-center gap-2">
                         <span className="font-mono text-blue-400 font-semibold">
                             {exportWidth}×{exportHeight}
                         </span>
                         <select
                             value={exportFormat}
+                            aria-label="Export image format"
                             onChange={(e) => setExportFormat(e.target.value as "png" | "jpeg")}
-                            className="bg-zinc-900 border border-zinc-800 text-zinc-200 rounded px-2 py-0.5 font-mono text-xs focus:outline-none"
+                            className="bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-lg px-2.5 py-1 font-mono text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
                         >
                             <option value="png">PNG</option>
                             <option value="jpeg">JPG</option>
@@ -327,7 +346,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                 <button
                     onClick={handleExportClick}
                     disabled={isExporting}
-                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white font-semibold text-sm shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                    className="group w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white font-semibold text-sm shadow-xl shadow-blue-600/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 flex items-center justify-center gap-2 transition-all duration-200 ease-out active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 motion-reduce:transform-none"
                 >
                     {isExporting ? (
                         <>
@@ -336,7 +355,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                         </>
                     ) : (
                         <>
-                            <Download className="w-4 h-4" />
+                            <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform duration-200 ease-out motion-reduce:transform-none" />
                             <span>Download High-Res Wallpaper</span>
                         </>
                     )}
