@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import { ChevronDown, HelpCircle, Sparkles } from 'lucide-react';
 
 export const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -26,14 +26,13 @@ export const FAQ: React.FC = () => {
   ];
 
   return (
-    <section id="faq" className="py-20 px-6 max-w-4xl mx-auto border-t border-zinc-800/60">
+    <section id="faq" className="py-20 px-4 sm:px-6 max-w-4xl mx-auto border-t border-zinc-800/60">
       <div className="text-center mb-14">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 mb-3">
-          <HelpCircle className="w-3.5 h-3.5 text-blue-400" />
-          <span>Frequently Asked Questions</span>
-        </div>
-        <h2 className="text-3xl font-extrabold text-white tracking-tight">
-          Everything You Need to Know
+        <span className="text-xs font-mono uppercase tracking-widest text-blue-400 font-semibold mb-2 block">
+          Frequently Asked Questions
+        </span>
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Everything You Need to Know.
         </h2>
       </div>
 
@@ -44,34 +43,50 @@ export const FAQ: React.FC = () => {
           return (
             <div
               key={idx}
-              className="rounded-2xl bg-zinc-900/50 border border-zinc-800/80 overflow-hidden transition-colors"
+              className={`rounded-2xl border transition-all duration-300 ${
+                isOpen
+                  ? 'bg-zinc-900/90 border-blue-500/30 shadow-lg shadow-blue-500/5'
+                  : 'bg-zinc-900/50 border-zinc-800/80 hover:border-zinc-700/80 hover:bg-zinc-900/70'
+              }`}
             >
               <button
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${idx}`}
                 id={`faq-button-${idx}`}
-                className="w-full p-5 text-left flex items-center justify-between font-bold text-sm sm:text-base text-zinc-200 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
+                className="w-full p-5 text-left flex items-center justify-between font-bold text-sm sm:text-base text-zinc-200 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl active:scale-[0.995]"
               >
-                <span>{item.question}</span>
-                <ChevronDown
-                  className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 text-blue-400' : ''
-                  }`}
-                  aria-hidden="true"
-                />
+                <span className="flex items-center gap-3">
+                  <span className={`text-xs font-mono font-semibold transition-colors ${isOpen ? 'text-blue-400' : 'text-zinc-500'}`}>
+                    0{idx + 1}
+                  </span>
+                  <span>{item.question}</span>
+                </span>
+                <div className={`p-1 rounded-lg transition-colors ${isOpen ? 'bg-blue-600/20 text-blue-400' : 'text-zinc-400'}`}>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      isOpen ? 'rotate-180' : 'rotate-0'
+                    }`}
+                    aria-hidden="true"
+                  />
+                </div>
               </button>
 
-              {isOpen && (
-                <div
-                  id={`faq-answer-${idx}`}
-                  role="region"
-                  aria-labelledby={`faq-button-${idx}`}
-                  className="px-5 pb-5 pt-1 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-zinc-800/40"
-                >
-                  {item.answer}
+              {/* Smooth Animated Accordion Content */}
+              <div
+                id={`faq-answer-${idx}`}
+                role="region"
+                aria-labelledby={`faq-button-${idx}`}
+                className={`grid transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-zinc-800/50">
+                    {item.answer}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
