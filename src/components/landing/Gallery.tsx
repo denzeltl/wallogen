@@ -151,7 +151,7 @@ export const Gallery: React.FC = () => {
                     href="/generate"
                     className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95"
                 >
-                    <span>Open Full Studio</span>
+                    <span>Open Generator</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>

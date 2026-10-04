@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Coffee } from 'lucide-react';
+import { WallogenLogo } from '@/components/WallogenLogo';
 import { CanvasViewport } from '@/components/generator/CanvasViewport';
 import { ControlsPanel } from '@/components/generator/ControlsPanel';
 import { DEFAULT_PATTERN, getPatternById } from '@/lib/engine';
@@ -66,7 +67,7 @@ export default function GeneratorPage() {
           </Link>
           <div className="h-3.5 w-px bg-zinc-800" />
           <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">W</div>
+            <WallogenLogo size={20} />
             <span className="font-bold text-xs tracking-tight hidden sm:inline">Wallogen</span>
           </div>
         </div>
