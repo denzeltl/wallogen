@@ -119,7 +119,7 @@ const CanvasCard: React.FC<{ item: ShowcaseItem }> = ({ item }) => {
                 </div>
             </div>
 
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                     <h3 className="font-bold text-sm text-zinc-100 group-hover:text-cyan-400 transition-colors">
                         {item.title}

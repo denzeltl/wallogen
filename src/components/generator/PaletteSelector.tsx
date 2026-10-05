@@ -129,7 +129,7 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
             <span>Customize Active Swatches</span>
             <span className="text-xs text-cyan-400 font-mono">{selectedPalette.name}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full">
             <div className="flex flex-col items-center">
               <span className="text-[10px] text-zinc-300 uppercase font-mono mb-1">BG</span>
               <input

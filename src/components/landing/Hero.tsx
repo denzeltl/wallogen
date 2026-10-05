@@ -143,7 +143,8 @@ export const Hero: React.FC = () => {
                             }`}
                         >
                             <Layers className="w-3.5 h-3.5" />
-                            <span>Dual Showcase</span>
+                            <span>Dual</span>
+                            <span className="hidden sm:inline">&nbsp;Showcase</span>
                         </button>
                         <button
                             onClick={() => setViewMode("desktop")}

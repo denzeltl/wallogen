@@ -57,7 +57,7 @@ export default function GeneratorPage() {
     };
 
     return (
-        <div className="min-h-screen bg-zinc-950 text-white flex flex-col h-screen overflow-hidden">
+        <div className="min-h-screen bg-zinc-950 text-white flex flex-col md:h-screen md:overflow-hidden">
             {/* Header */}
             <header className="h-12 border-b border-zinc-800/80 px-4 flex items-center justify-between bg-zinc-950/90 backdrop-blur-md z-30 shrink-0">
                 <div className="flex items-center gap-3">
@@ -71,7 +71,7 @@ export default function GeneratorPage() {
                     <div className="h-3.5 w-px bg-zinc-800" />
                     <div className="flex items-center gap-1.5">
                         <WallogenLogo size={20} />
-                        <span className="font-bold text-xs tracking-tight hidden sm:inline">Wallogen</span>
+                        <span className="font-bold text-xs tracking-tight">Wallogen</span>
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@ export default function GeneratorPage() {
             </header>
 
             {/* Main workspace */}
-            <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <main className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden min-h-0">
                 <CanvasViewport
                     patternId={patternId}
                     palette={palette}

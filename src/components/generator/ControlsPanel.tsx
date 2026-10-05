@@ -119,11 +119,11 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
     };
 
     return (
-        <div className="w-full md:w-[380px] lg:w-[400px] bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800/80 flex flex-col h-full max-h-screen overflow-hidden shrink-0">
+        <div className="w-full md:w-[380px] lg:w-[400px] bg-zinc-950 border-t md:border-t-0 md:border-l border-zinc-800/80 flex flex-col h-auto md:h-full md:max-h-screen shrink-0">
             {/* Studio Header Bar */}
-            <div className="px-4 py-3 border-b border-zinc-800/80 flex items-center justify-between bg-zinc-950/95 backdrop-blur-md z-20 shrink-0">
+            <div className="px-3 sm:px-4 py-2.5 sm:py-3 border-b border-zinc-800/80 flex items-center justify-between bg-zinc-950/95 backdrop-blur-md z-20 shrink-0">
                 <div className="flex items-center gap-2">
-                    <h2 className="font-bold text-sm text-zinc-100 tracking-tight">Wallpaper Generator</h2>
+                    <h2 className="font-bold text-xs sm:text-sm text-zinc-100 tracking-tight">Wallpaper Generator</h2>
                 </div>
 
                 <div className="flex items-center gap-1.5">
@@ -148,14 +148,14 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                         aria-selected={activeTab === "patterns"}
                         aria-controls="tabpanel-patterns"
                         onClick={() => setActiveTab("patterns")}
-                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
+                        className={`group flex items-center justify-center gap-1 sm:gap-1.5 py-2 sm:py-2.5 min-h-[40px] sm:min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                             activeTab === "patterns"
                                 ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <Layers className="w-4 h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
-                        <span className="text-xs">Patterns</span>
+                        <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
+                        <span className="text-[11px] sm:text-xs">Patterns</span>
                     </button>
 
                     <button
@@ -164,14 +164,14 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                         aria-selected={activeTab === "tuning"}
                         aria-controls="tabpanel-tuning"
                         onClick={() => setActiveTab("tuning")}
-                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
+                        className={`group flex items-center justify-center gap-1 sm:gap-1.5 py-2 sm:py-2.5 min-h-[40px] sm:min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                             activeTab === "tuning"
                                 ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <Sliders className="w-4 h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
-                        <span className="text-xs">Tuning</span>
+                        <Sliders className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
+                        <span className="text-[11px] sm:text-xs">Tuning</span>
                     </button>
 
                     <button
@@ -180,14 +180,14 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                         aria-selected={activeTab === "colors"}
                         aria-controls="tabpanel-colors"
                         onClick={() => setActiveTab("colors")}
-                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
+                        className={`group flex items-center justify-center gap-1 sm:gap-1.5 py-2 sm:py-2.5 min-h-[40px] sm:min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                             activeTab === "colors"
                                 ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <PaletteIcon className="w-4 h-4 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300 motion-reduce:transform-none" />
-                        <span className="text-xs">Colors</span>
+                        <PaletteIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300 motion-reduce:transform-none" />
+                        <span className="text-[11px] sm:text-xs">Colors</span>
                     </button>
 
                     <button
@@ -196,20 +196,20 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                         aria-selected={activeTab === "screen"}
                         aria-controls="tabpanel-screen"
                         onClick={() => setActiveTab("screen")}
-                        className={`group flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
+                        className={`group flex items-center justify-center gap-1 sm:gap-1.5 py-2 sm:py-2.5 min-h-[40px] sm:min-h-[44px] rounded-lg font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                             activeTab === "screen"
                                 ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
                                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
                         }`}
                     >
-                        <Monitor className="w-4 h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
-                        <span className="text-xs">Screen</span>
+                        <Monitor className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-200 motion-reduce:transform-none" />
+                        <span className="text-[11px] sm:text-xs">Screen</span>
                     </button>
                 </div>
             </div>
 
             {/* Tab Panel Content Body */}
-            <div data-lenis-prevent className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {activeTab === "patterns" && (
                     <div id="tabpanel-patterns" role="tabpanel" aria-labelledby="tab-patterns" className="space-y-3 animate-in fade-in duration-200">
                         <PatternPicker selectedPatternId={patternId} onSelectPattern={onSelectPattern} />
@@ -324,7 +324,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
             </div>
 
             {/* Sticky Export Footer */}
-            <div className="px-4 py-3 border-t border-zinc-800/80 bg-zinc-950 shrink-0 space-y-2.5">
+            <div className="sticky md:relative bottom-0 z-30 px-4 py-3 border-t border-zinc-800/80 bg-zinc-950/95 backdrop-blur-md shrink-0 space-y-2.5 shadow-2xl md:shadow-none">
                 <div className="flex items-center justify-between text-xs">
                     <span className="text-zinc-300 font-medium">Export Specification</span>
                     <div className="flex items-center gap-2">

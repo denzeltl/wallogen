@@ -76,10 +76,10 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const date = now.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
 
   return (
-    <div className="relative flex-1 flex flex-col items-center justify-center bg-zinc-950/60 overflow-hidden min-h-[400px]">
+    <div className="relative flex-1 flex flex-col items-center justify-center bg-zinc-950/60 overflow-hidden min-h-[260px] sm:min-h-[360px] md:min-h-[400px] pt-14 pb-4 px-3 sm:p-6">
       {/* Top Floating Glass Bar */}
-      <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-20">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900/90 border border-zinc-800 text-xs font-mono text-zinc-300 backdrop-blur-md">
+      <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2 z-20">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-zinc-900/90 border border-zinc-800 text-[11px] sm:text-xs font-mono text-zinc-300 backdrop-blur-md">
           <span className="text-zinc-100">{targetWidth}×{targetHeight}</span>
           <span className="text-zinc-600">•</span>
           <span className="text-cyan-400 font-semibold">
@@ -94,7 +94,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
               onClick={() => handleFrameClick(f)}
               aria-label={`Preview frame: ${f}`}
               aria-pressed={deviceFrame === f}
-              className={`flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-md transition-all font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
+              className={`flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 min-h-[32px] sm:min-h-[36px] rounded-md transition-all font-medium text-[11px] sm:text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                 deviceFrame === f
                   ? 'bg-cyan-500 text-zinc-950 shadow-sm font-bold'
                   : 'hover:text-zinc-100 hover:bg-zinc-800/60'
@@ -119,11 +119,11 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       </div>
 
       {/* Viewport Frame Container */}
-      <div className="relative flex items-center justify-center w-full h-full max-h-[75vh] p-6">
+      <div className="relative flex items-center justify-center w-full h-full max-h-[45vh] sm:max-h-[60vh] md:max-h-[75vh] p-2 sm:p-6">
         {/* Desktop Stand Base */}
         {deviceFrame === 'desktop' && (
           <div className="absolute pointer-events-none flex flex-col items-center z-0">
-            <div className="w-14 h-2.5 bg-zinc-800 rounded-b-md mt-[54vh]" />
+            <div className="w-14 h-2.5 bg-zinc-800 rounded-b-md mt-[44vh] sm:mt-[54vh]" />
             <div className="w-28 h-1 bg-zinc-700/70 rounded-full" />
           </div>
         )}
@@ -132,9 +132,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         <div
           className={`relative transition-all duration-200 overflow-hidden ${
             deviceFrame === 'desktop'
-              ? 'rounded-xl p-2.5 bg-zinc-900 border-[3px] border-zinc-800 shadow-2xl'
+              ? 'rounded-xl p-2 sm:p-2.5 bg-zinc-900 border-[3px] border-zinc-800 shadow-2xl'
               : deviceFrame === 'mobile'
-              ? 'rounded-[36px] p-3 bg-zinc-900 border-[3px] border-zinc-800 shadow-2xl max-h-[65vh]'
+              ? 'rounded-[32px] sm:rounded-[36px] p-2 sm:p-3 bg-zinc-900 border-[3px] border-zinc-800 shadow-2xl max-h-[42vh] sm:max-h-[65vh]'
               : 'rounded-xl border border-zinc-800/60 shadow-2xl bg-black'
           }`}
         >
