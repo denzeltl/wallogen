@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { AiGenerateResponse } from '@/types';
+import { AiGenerateResponse, AiWallpaperConfig } from '@/types';
 import { AiGenerationError, generateWallpaperConfig } from '@/lib/ai/gemini';
+import { generateWallpaperConfigGroq } from '@/lib/ai/groq';
 import { checkRateLimit } from '@/lib/ai/rateLimit';
 import { MAX_PROMPT_LENGTH, MIN_PROMPT_LENGTH } from '@/lib/ai/constants';
 
@@ -37,15 +38,37 @@ export async function POST(req: NextRequest) {
     return reply({ ok: false, reason: limit.reason, retryAfterSeconds: limit.retryAfterSeconds }, 429);
   }
 
-  try {
-    const config = await generateWallpaperConfig(prompt);
-    return reply({ ok: true, config }, 200);
-  } catch (err) {
-    console.error('[api/ai/generate] Error during generation:', err);
-    if (err instanceof AiGenerationError) {
-      const status = err.reason === 'unavailable' ? 503 : 429;
-      return reply({ ok: false, reason: err.reason, retryAfterSeconds: err.retryAfterSeconds }, status);
+  let config: AiWallpaperConfig | null = null;
+  let lastError: unknown = null;
+
+  // 1. Try Groq API primary provider if GROQ_API_KEY is configured
+  if (process.env.GROQ_API_KEY?.trim()) {
+    try {
+      config = await generateWallpaperConfigGroq(prompt);
+    } catch (err) {
+      lastError = err;
+      console.warn('[api/ai/generate] Groq provider failed, falling back to Gemini:', err instanceof Error ? err.message : err);
     }
-    return reply({ ok: false, reason: 'unavailable' }, 503);
   }
+
+  // 2. Try Gemini API secondary provider if Groq was not used or failed
+  if (!config && process.env.GEMINI_API_KEY?.trim()) {
+    try {
+      config = await generateWallpaperConfig(prompt);
+    } catch (err) {
+      lastError = err;
+      console.warn('[api/ai/generate] Gemini provider failed:', err instanceof Error ? err.message : err);
+    }
+  }
+
+  if (config) {
+    return reply({ ok: true, config }, 200);
+  }
+
+  if (lastError instanceof AiGenerationError) {
+    const status = lastError.reason === 'unavailable' ? 503 : 429;
+    return reply({ ok: false, reason: lastError.reason, retryAfterSeconds: lastError.retryAfterSeconds }, status);
+  }
+
+  return reply({ ok: false, reason: 'unavailable' }, 503);
 }
