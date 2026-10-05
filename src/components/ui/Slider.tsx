@@ -36,7 +36,7 @@ export const Slider: React.FC<SliderProps> = ({
             <button
               onClick={onToggleLock}
               aria-label={isLocked ? `Unlock ${label} parameter` : `Lock ${label} parameter from randomizing`}
-              className={`p-2 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-lg transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`p-2 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-lg transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                 isLocked
                   ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
@@ -66,7 +66,7 @@ export const Slider: React.FC<SliderProps> = ({
         <div className="absolute inset-x-0 h-2 rounded-full bg-zinc-800 border border-zinc-700/40" />
         <div
           className={`absolute left-0 h-2 rounded-full transition-all duration-75 ${
-            isLocked ? 'bg-amber-500' : 'bg-blue-600'
+            isLocked ? 'bg-amber-500' : 'bg-cyan-500'
           }`}
           style={{ width: `${percentage}%` }}
         />
@@ -82,7 +82,7 @@ export const Slider: React.FC<SliderProps> = ({
         />
         <div
           className={`absolute w-5 h-5 rounded-full bg-white border-2 shadow-md transition-all duration-75 pointer-events-none group-hover:scale-110 ${
-            isLocked ? 'border-amber-500 shadow-amber-500/30' : 'border-blue-600 shadow-blue-600/20'
+            isLocked ? 'border-amber-500 shadow-amber-500/30' : 'border-cyan-400 shadow-cyan-500/30'
           }`}
           style={{ left: `calc(${percentage}% - 10px)` }}
         />

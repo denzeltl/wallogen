@@ -34,7 +34,7 @@ export const Features: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
         <div>
-          <span className="text-xs font-mono uppercase tracking-widest text-blue-400 font-semibold mb-2 block">
+          <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold mb-2 block">
             Engine Specifications
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -55,7 +55,7 @@ export const Features: React.FC = () => {
           >
             <div>
               <div className="flex items-center justify-between mb-6">
-                <span className="text-xs font-mono font-bold text-zinc-500 group-hover:text-blue-400 transition-colors">
+                <span className="text-xs font-mono font-bold text-zinc-500 group-hover:text-cyan-400 transition-colors">
                   {item.num}
                 </span>
                 <span className="text-[10px] font-mono text-zinc-400 bg-zinc-800/60 px-2 py-0.5 rounded border border-zinc-700/50">

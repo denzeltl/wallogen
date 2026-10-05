@@ -63,9 +63,9 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
           <button
             onClick={() => setShowColorEditor(!showColorEditor)}
             aria-label="Edit custom colors"
-            className={`p-2 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-lg border text-xs transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`p-2 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center rounded-lg border text-xs transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
               showColorEditor
-                ? "bg-blue-600/20 border-blue-500 text-blue-400 font-medium"
+                ? "bg-cyan-500/20 border-cyan-500 text-cyan-400 font-medium"
                 : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-zinc-100"
             }`}
             title="Edit Custom Colors"
@@ -79,7 +79,7 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
               onClick={() => setFilterMode("all")}
               aria-label="Show all palettes"
               aria-pressed={filterMode === "all"}
-              className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                 filterMode === "all" ? "bg-zinc-800 text-white font-medium" : "hover:text-zinc-100"
               }`}
             >
@@ -89,7 +89,7 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
               onClick={() => setFilterMode("dark")}
               aria-label="Filter dark mode palettes"
               aria-pressed={filterMode === "dark"}
-              className={`p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                 filterMode === "dark" ? "bg-zinc-800 text-white" : "hover:text-zinc-100"
               }`}
               title="Dark Mode Palettes"
@@ -100,7 +100,7 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
               onClick={() => setFilterMode("light")}
               aria-label="Filter light mode palettes"
               aria-pressed={filterMode === "light"}
-              className={`p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`p-1.5 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                 filterMode === "light" ? "bg-zinc-800 text-white" : "hover:text-zinc-100"
               }`}
               title="Light Mode Palettes"
@@ -113,10 +113,10 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
           <button
             onClick={handleShuffle}
             aria-label="Pick a random palette"
-            className="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs font-medium border border-zinc-800 transition-all active:scale-95 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs font-medium border border-zinc-800 transition-all active:scale-95 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
             title="Pick a random palette (different from current)"
           >
-            <Shuffle className="w-3.5 h-3.5 text-blue-400" />
+            <Shuffle className="w-3.5 h-3.5 text-cyan-400" />
             <span className="hidden sm:inline">Randomize</span>
           </button>
         </div>
@@ -127,7 +127,7 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
         <div className="p-3 bg-zinc-900/90 border border-zinc-800 rounded-xl space-y-2 animate-in fade-in duration-150">
           <div className="text-xs font-semibold text-zinc-200 flex items-center justify-between">
             <span>Customize Active Swatches</span>
-            <span className="text-xs text-blue-400 font-mono">{selectedPalette.name}</span>
+            <span className="text-xs text-cyan-400 font-mono">{selectedPalette.name}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex flex-col items-center">
@@ -164,19 +164,19 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
                     onClick={handleRandomPaletteCardClick}
                     className={`flex flex-col p-2 rounded-xl border text-left transition-all active:scale-[0.98] ${
                         isRandomSelected
-                            ? "bg-blue-600/15 border-blue-500/70 text-white shadow-md shadow-blue-500/10 ring-1 ring-blue-500/30"
-                            : "bg-zinc-900/90 border-blue-500/40 hover:bg-zinc-800/90 hover:border-blue-500/70 text-zinc-200"
+                            ? "bg-cyan-500/15 border-cyan-500/70 text-white shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500/30"
+                            : "bg-zinc-900/90 border-cyan-500/40 hover:bg-zinc-800/90 hover:border-cyan-500/70 text-zinc-200"
                     }`}
                 >
                     <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs font-semibold flex items-center gap-1 text-blue-400">
+                        <span className="text-xs font-semibold flex items-center gap-1 text-cyan-400">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>Random Palette</span>
                         </span>
-                        {isRandomSelected && <Check className="w-3.5 h-3.5 text-blue-400 shrink-0" />}
+                        {isRandomSelected && <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
                     </div>
 
-                    <div className="flex items-center h-3.5 rounded-md overflow-hidden w-full border border-blue-500/30 bg-gradient-to-r from-pink-500 via-purple-500 via-blue-500 to-emerald-400" />
+                    <div className="flex items-center h-3.5 rounded-md overflow-hidden w-full border border-cyan-500/30 bg-gradient-to-r from-pink-500 via-purple-500 via-cyan-500 to-emerald-400" />
                 </button>
 
                 {/* Curated Palettes */}
@@ -189,13 +189,13 @@ export const PaletteSelector: React.FC<PaletteSelectorProps> = ({ selectedPalett
                             onClick={() => onSelectPalette(palette)}
                             className={`flex flex-col p-2 rounded-xl border text-left transition-all active:scale-[0.98] ${
                                 isSelected
-                                    ? "bg-blue-600/15 border-blue-500/70 text-white shadow-md shadow-blue-500/10 ring-1 ring-blue-500/30"
+                                    ? "bg-cyan-500/15 border-cyan-500/70 text-white shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500/30"
                                     : "bg-zinc-900/60 border-zinc-800 hover:bg-zinc-800/80 hover:border-zinc-700"
                             }`}
                         >
                             <div className="flex items-center justify-between mb-1.5">
                                 <span className="text-xs font-semibold text-zinc-200 truncate">{palette.name}</span>
-                                {isSelected && <Check className="w-3.5 h-3.5 text-blue-400 shrink-0" />}
+                                {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
                             </div>
 
                             <div className="flex items-center h-3.5 rounded-md overflow-hidden w-full border border-zinc-800">

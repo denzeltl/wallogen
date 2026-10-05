@@ -8,7 +8,7 @@ import { Header } from "@/components/landing/Header";
 
 export default function Home() {
     return (
-        <div className="min-h-screen bg-zinc-950 text-white flex flex-col justify-between selection:bg-blue-600">
+        <div className="min-h-screen bg-zinc-950 text-white flex flex-col justify-between selection:bg-cyan-500 selection:text-zinc-950">
             {/* Navigation Header */}
             <Header />
 
@@ -27,7 +27,7 @@ export default function Home() {
                     <p>© {new Date().getFullYear()} Wallogen. Minimalist Wallpaper Generator.</p>
                     <div className="flex items-center gap-6">
                         <a
-                            href="https://buymeacoffee.com"
+                            href="https://buymeacoffee.com/denzeltl"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-amber-400 transition-colors font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded px-1"

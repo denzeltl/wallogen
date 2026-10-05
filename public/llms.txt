@@ -1,0 +1,17 @@
+# Wallogen — Minimalist Procedural Wallpaper Generator
+
+> Wallogen is a minimalist, high-resolution wallpaper generator web application. It runs 100% client-side inside the browser using HTML5 Canvas 2D and vector mathematics. No sign-up, zero data collection, zero image uploads.
+
+## Core Capabilities
+
+- **14 Procedural Wallpaper Engines:** Ocean Waves, Soft Gradients, Mesh Aura, Architectural Arcs, Topography Contours, Bauhaus Geometry, Liquid Silk Flow Fields, Cosmic Noise Clouds, Voronoi Cellular Tessellations, Curved Line Art, Halftone Dot Grids, Orbital Rings, Northern Lights Aurora, and Prism Geometry.
+- **Native High-Res Export:** Renders offscreen at native target display resolutions up to 4K (3840×2160), 8K (7680×4320), QHD, Ultrawide (3440×1440), iPhone 15 Pro (1290×2796), iPad, and Android.
+- **Seeded Deterministic PRNG:** Seeded Mulberry32 random number generator allows reproducing exact wallpaper compositions.
+- **Parameter Fine-Tuning:** Scale (0.4x to 3.0x), Density (2 to 40 elements), Complexity (1 to 10 layers), Film Grain Noise (0% to 30%), Angle / Rotation (0° to 360°), and individual Slider Parameter Locking.
+- **Curated Color Palettes:** 13 dark and light mode palette presets plus an active HSL Custom Hex Color Picker and procedural Random Palette generator.
+
+## Key Links
+
+- [Wallogen App / Studio Generator](https://wallogen.vercel.app/generate): The main interactive wallpaper creation studio.
+- [Wallogen Landing Page](https://wallogen.vercel.app/): Product showcase, feature overview, FAQ, and creator support.
+- [Full LLM Specification](https://wallogen.vercel.app/llms-full.txt): Comprehensive engine catalog and mathematical render specs for AI search systems.

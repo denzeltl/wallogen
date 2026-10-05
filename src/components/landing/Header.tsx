@@ -44,9 +44,9 @@ export const Header: React.FC = () => {
     const closeMenu = () => setMobileMenuOpen(false);
 
     const navLinks = [
-        { num: "01", href: "#features", label: "// Features", subtext: "Procedural canvas specifications" },
-        { num: "02", href: "#gallery", label: "// Gallery", subtext: "Explore curated wallpaper styles" },
-        { num: "03", href: "#faq", label: "// FAQ", subtext: "Resolutions & licensing questions" },
+        { num: "01", href: "#features", label: "Features", subtext: "Procedural canvas specifications" },
+        { num: "02", href: "#gallery", label: "Gallery", subtext: "Explore curated wallpaper styles" },
+        { num: "03", href: "#faq", label: "FAQ", subtext: "Resolutions & licensing questions" },
     ];
 
     return (
@@ -57,7 +57,7 @@ export const Header: React.FC = () => {
                     <Link
                         href="/"
                         onClick={closeMenu}
-                        className="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg active:scale-95 transition-transform"
+                        className="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-lg active:scale-95 transition-transform"
                     >
                         <WallogenLogo size={28} className="group-hover:scale-105 transition-transform" />
                         <span className="font-extrabold text-base tracking-tight text-white group-hover:text-zinc-200 transition-colors">
@@ -70,28 +70,28 @@ export const Header: React.FC = () => {
                 <nav className="hidden md:flex items-center gap-8 text-xs font-mono font-medium text-zinc-300">
                     <a
                         href="#features"
-                        className="hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md px-1 py-0.5"
+                        className="hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-md px-1 py-0.5"
                     >
-                        // Features
+                        Features
                     </a>
                     <a
                         href="#gallery"
-                        className="hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md px-1 py-0.5"
+                        className="hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-md px-1 py-0.5"
                     >
-                        // Gallery
+                        Gallery
                     </a>
                     <a
                         href="#faq"
-                        className="hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md px-1 py-0.5"
+                        className="hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-md px-1 py-0.5"
                     >
-                        // FAQ
+                        FAQ
                     </a>
                 </nav>
 
                 {/* Desktop Action Group */}
                 <div className="hidden sm:flex items-center gap-3">
                     <a
-                        href="https://buymeacoffee.com"
+                        href="https://buymeacoffee.com/denzeltl"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 hover:border-amber-500/40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 active:scale-95"
@@ -101,7 +101,7 @@ export const Header: React.FC = () => {
                     </a>
                     <Link
                         href="/generate"
-                        className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20 hover:shadow-blue-500/35 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                        className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-cyan-500 hover:bg-cyan-400 text-zinc-950 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-400/35 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
                     >
                         <span>Launch Generator</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
@@ -113,7 +113,7 @@ export const Header: React.FC = () => {
                     <Link
                         href="/generate"
                         onClick={closeMenu}
-                        className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/20 transition-all active:scale-95"
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-zinc-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95"
                     >
                         Generator
                     </Link>
@@ -122,18 +122,18 @@ export const Header: React.FC = () => {
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         aria-expanded={mobileMenuOpen}
                         aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-                        className="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-300 active:scale-90"
+                        className="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 transition-all duration-300 active:scale-90"
                     >
                         <div
                             className={`transition-transform duration-300 ${mobileMenuOpen ? "rotate-90 scale-110" : "rotate-0"}`}
                         >
-                            {mobileMenuOpen ? <X className="w-5 h-5 text-blue-400" /> : <Menu className="w-5 h-5" />}
+                            {mobileMenuOpen ? <X className="w-5 h-5 text-cyan-400" /> : <Menu className="w-5 h-5" />}
                         </div>
                     </button>
                 </div>
             </div>
 
-            {/* Mobile Full-Viewport Slide Sheet Overlay (Non-clunky fixed overlay with backdrop blur) */}
+            {/* Mobile Full-Viewport Slide Sheet Overlay */}
             <div
                 className={`fixed inset-x-0 top-16 bottom-0 z-40 md:hidden bg-zinc-950/95 backdrop-blur-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between overflow-y-auto px-6 py-8 border-t border-zinc-800/80 ${
                     mobileMenuOpen
@@ -144,7 +144,7 @@ export const Header: React.FC = () => {
                 {/* Navigation Items */}
                 <div className="space-y-6">
                     <div className="flex items-center justify-between text-xs font-mono text-zinc-400 uppercase tracking-wider pb-2 border-b border-zinc-900">
-                        <div className="flex items-center gap-1.5 text-blue-400 font-semibold">
+                        <div className="flex items-center gap-1.5 text-cyan-400 font-semibold">
                             <WallogenLogo size={18} />
                             <span>Wallogen</span>
                         </div>
@@ -162,7 +162,7 @@ export const Header: React.FC = () => {
                                 }`}
                             >
                                 <div className="flex items-center gap-3.5">
-                                    <span className="text-xs font-mono font-bold text-zinc-400 group-hover:text-blue-400 transition-colors">
+                                    <span className="text-xs font-mono font-bold text-zinc-400 group-hover:text-cyan-400 transition-colors">
                                         {link.num}
                                     </span>
                                     <div className="flex flex-col">
@@ -172,7 +172,7 @@ export const Header: React.FC = () => {
                                         <span className="text-xs text-zinc-400 font-normal">{link.subtext}</span>
                                     </div>
                                 </div>
-                                <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-200" />
+                                <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all duration-200" />
                             </a>
                         ))}
                     </nav>
@@ -183,17 +183,17 @@ export const Header: React.FC = () => {
                     <Link
                         href="/generate"
                         onClick={closeMenu}
-                        className="w-full group flex items-center justify-between p-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-xl shadow-blue-600/25 active:scale-[0.98] transition-all duration-200"
+                        className="w-full group flex items-center justify-between p-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-sm shadow-xl shadow-cyan-500/25 active:scale-[0.98] transition-all duration-200"
                     >
                         <div className="flex items-center gap-3">
-                            <Sparkles className="w-5 h-5 text-blue-200" />
+                            <Sparkles className="w-5 h-5 text-zinc-950/70" />
                             <span>Launch Wallpaper Generator</span>
                         </div>
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
 
                     <a
-                        href="https://buymeacoffee.com"
+                        href="https://buymeacoffee.com/denzeltl"
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={closeMenu}

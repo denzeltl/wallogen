@@ -85,7 +85,7 @@ export const Hero: React.FC = () => {
         <section className="relative pt-10 pb-20 px-4 sm:px-6 max-w-7xl mx-auto flex flex-col items-center">
             {/* Technical Engine Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono text-zinc-300 bg-zinc-900/90 border border-zinc-800 mb-8 backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                 <span className="font-semibold text-zinc-200">14 Procedural Engines</span>
                 <span className="text-zinc-600">•</span>
                 <span className="text-zinc-400">Native 4K & Mobile HTML5 Canvas</span>
@@ -106,13 +106,13 @@ export const Hero: React.FC = () => {
             <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                 <Link
                     href="/generate"
-                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20 hover:shadow-blue-500/35 hover:-translate-y-0.5 transition-all duration-200 ease-out active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 motion-reduce:transform-none"
+                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm sm:text-base font-bold bg-cyan-500 hover:bg-cyan-400 text-zinc-950 shadow-xl shadow-cyan-500/25 hover:shadow-cyan-400/40 hover:-translate-y-0.5 transition-all duration-200 ease-out active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 motion-reduce:transform-none"
                 >
                     <span>Open Generator</span>
                     <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1.5 transition-transform duration-200 ease-out motion-reduce:transform-none" />
                 </Link>
                 <a
-                    href="https://buymeacoffee.com"
+                    href="https://buymeacoffee.com/denzeltl"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 text-amber-400 hover:text-amber-300 hover:-translate-y-0.5 transition-all duration-200 ease-out active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 motion-reduce:transform-none"
@@ -138,7 +138,7 @@ export const Hero: React.FC = () => {
                             aria-label="View both desktop and mobile screens"
                             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                                 viewMode === "both"
-                                    ? "bg-blue-600 text-white shadow-sm font-semibold"
+                                    ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
                                     : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
                             }`}
                         >
@@ -151,7 +151,7 @@ export const Hero: React.FC = () => {
                             aria-label="View desktop monitor screen only"
                             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                                 viewMode === "desktop"
-                                    ? "bg-blue-600 text-white shadow-sm font-semibold"
+                                    ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
                                     : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
                             }`}
                         >
@@ -164,7 +164,7 @@ export const Hero: React.FC = () => {
                             aria-label="View mobile phone screen only"
                             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
                                 viewMode === "mobile"
-                                    ? "bg-blue-600 text-white shadow-sm font-semibold"
+                                    ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
                                     : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
                             }`}
                         >
@@ -188,7 +188,7 @@ export const Hero: React.FC = () => {
                             {showControls ? (
                                 <EyeOff className="w-3.5 h-3.5 text-zinc-400" />
                             ) : (
-                                <Eye className="w-3.5 h-3.5 text-blue-400" />
+                                <Eye className="w-3.5 h-3.5 text-cyan-400" />
                             )}
                             <span className="hidden sm:inline">{showControls ? "Hide Badges" : "Show Badges"}</span>
                         </button>
@@ -197,9 +197,9 @@ export const Hero: React.FC = () => {
                         <button
                             onClick={handleShuffle}
                             aria-label="Randomize desktop and mobile live preview"
-                            className="group/btn flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs font-semibold border border-zinc-800 hover:border-blue-500/40 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                            className="group/btn flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs font-semibold border border-zinc-800 hover:border-cyan-500/40 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
                         >
-                            <Dices className="w-4 h-4 text-blue-400 group-hover/btn:rotate-180 transition-transform duration-500 ease-out" />
+                            <Dices className="w-4 h-4 text-cyan-400 group-hover/btn:rotate-180 transition-transform duration-500 ease-out" />
                             <span>Surprise Me</span>
                         </button>
                     </div>
@@ -225,7 +225,7 @@ export const Hero: React.FC = () => {
                                         </div>
                                         <div className="w-2 h-2 rounded-full bg-zinc-800" />
                                         <div className="flex items-center gap-1.5 text-[10px] font-mono text-zinc-400">
-                                            <Monitor className="w-3 h-3 text-blue-400" />
+                                            <Monitor className="w-3 h-3 text-cyan-400" />
                                             <span>Desktop 4K (16:9)</span>
                                         </div>
                                     </div>
@@ -240,7 +240,7 @@ export const Hero: React.FC = () => {
                                         />
 
                                         {showControls && (
-                                            <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-zinc-950/85 border border-zinc-800 text-[10px] font-mono text-blue-400 backdrop-blur-md">
+                                            <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-zinc-950/85 border border-zinc-800 text-[10px] font-mono text-cyan-400 backdrop-blur-md">
                                                 3840×2160 (4K UHD)
                                             </div>
                                         )}
@@ -296,7 +296,7 @@ export const Hero: React.FC = () => {
                                     aria-label={`Select ${pattern.name} wallpaper pattern`}
                                     className={`px-3 py-1.5 rounded-xl text-xs font-medium font-mono transition-all whitespace-nowrap ${
                                         isSelected
-                                            ? "bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30"
+                                            ? "bg-cyan-500 text-zinc-950 font-bold shadow-md shadow-cyan-500/30"
                                             : "bg-zinc-900 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 border border-zinc-800"
                                     }`}
                                 >
@@ -308,7 +308,7 @@ export const Hero: React.FC = () => {
 
                     <Link
                         href="/generate"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-blue-400 hover:text-blue-300 font-semibold transition-colors whitespace-nowrap"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-bold transition-colors whitespace-nowrap"
                     >
                         <span>Launch Generator</span>
                         <ArrowRight className="w-3.5 h-3.5" />

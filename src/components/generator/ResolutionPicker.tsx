@@ -50,7 +50,7 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
             onClick={() => setActiveTab('desktop')}
             aria-label="Show desktop presets"
             aria-pressed={activeTab === 'desktop'}
-            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
               activeTab === 'desktop' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-100'
             }`}
           >
@@ -60,7 +60,7 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
             onClick={() => setActiveTab('mobile')}
             aria-label="Show mobile presets"
             aria-pressed={activeTab === 'mobile'}
-            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
               activeTab === 'mobile' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-100'
             }`}
           >
@@ -70,7 +70,7 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
             onClick={() => setActiveTab('all')}
             aria-label="Show all resolution presets"
             aria-pressed={activeTab === 'all'}
-            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`px-2.5 py-1.5 min-h-[36px] rounded-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
               activeTab === 'all' ? 'bg-zinc-800 text-white font-medium' : 'hover:text-zinc-100'
             }`}
           >
@@ -90,16 +90,16 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
               key={preset.id}
               onClick={() => onSelectPreset(preset.id)}
               aria-label={`Select ${preset.name} (${preset.width} by ${preset.height} pixels)`}
-              className={`flex items-center justify-between p-2.5 min-h-[48px] rounded-xl border text-left transition-all active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`flex items-center justify-between p-2.5 min-h-[48px] rounded-xl border text-left transition-all active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                 isSelected
-                  ? 'bg-blue-600/15 border-blue-500/70 text-white shadow-md shadow-blue-500/10 ring-1 ring-blue-500/30'
+                  ? 'bg-cyan-500/15 border-cyan-500/70 text-white shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500/30'
                   : 'bg-zinc-900/60 border-zinc-800 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 hover:border-zinc-700'
               }`}
             >
               <div className="flex items-center gap-2 overflow-hidden">
                 <div
                   className={`p-1.5 rounded-lg shrink-0 ${
-                    isSelected ? 'bg-blue-600 text-white shadow-sm' : 'bg-zinc-800 text-zinc-300'
+                    isSelected ? 'bg-cyan-500 text-zinc-950 shadow-sm font-bold' : 'bg-zinc-800 text-zinc-300'
                   }`}
                 >
                   {icon}
@@ -113,7 +113,7 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
                   </div>
                 </div>
               </div>
-              {isSelected && <Check className="w-3.5 h-3.5 text-blue-400 shrink-0 ml-1" />}
+              {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 ml-1" />}
             </button>
           );
         })}
@@ -136,7 +136,7 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
                 onChange={(e) =>
                   onChangeCustomDimensions(parseInt(e.target.value) || 1920, customHeight)
                 }
-                className="w-full px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
               />
             </div>
             <div>
@@ -151,7 +151,7 @@ export const ResolutionPicker: React.FC<ResolutionPickerProps> = ({
                 onChange={(e) =>
                   onChangeCustomDimensions(customWidth, parseInt(e.target.value) || 1080)
                 }
-                className="w-full px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
               />
             </div>
           </div>

@@ -82,7 +82,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900/90 border border-zinc-800 text-xs font-mono text-zinc-300 backdrop-blur-md">
           <span className="text-zinc-100">{targetWidth}×{targetHeight}</span>
           <span className="text-zinc-600">•</span>
-          <span className="text-blue-400 font-semibold">
+          <span className="text-cyan-400 font-semibold">
             {aspectRatio > 1.2 ? 'Landscape' : aspectRatio < 0.8 ? 'Portrait' : 'Square'}
           </span>
         </div>
@@ -94,9 +94,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
               onClick={() => handleFrameClick(f)}
               aria-label={`Preview frame: ${f}`}
               aria-pressed={deviceFrame === f}
-              className={`flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-md transition-all font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-md transition-all font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                 deviceFrame === f
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-cyan-500 text-zinc-950 shadow-sm font-bold'
                   : 'hover:text-zinc-100 hover:bg-zinc-800/60'
               }`}
             >

@@ -28,7 +28,7 @@ export const FAQ: React.FC = () => {
   return (
     <section id="faq" className="py-20 px-4 sm:px-6 max-w-4xl mx-auto border-t border-zinc-800/60">
       <div className="text-center mb-14">
-        <span className="text-xs font-mono uppercase tracking-widest text-blue-400 font-semibold mb-2 block">
+        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold mb-2 block">
           Frequently Asked Questions
         </span>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -45,7 +45,7 @@ export const FAQ: React.FC = () => {
               key={idx}
               className={`rounded-2xl border transition-all duration-300 ${
                 isOpen
-                  ? 'bg-zinc-900/90 border-blue-500/30 shadow-lg shadow-blue-500/5'
+                  ? 'bg-zinc-900/90 border-cyan-500/30 shadow-lg shadow-cyan-500/5'
                   : 'bg-zinc-900/50 border-zinc-800/80 hover:border-zinc-700/80 hover:bg-zinc-900/70'
               }`}
             >
@@ -54,15 +54,15 @@ export const FAQ: React.FC = () => {
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${idx}`}
                 id={`faq-button-${idx}`}
-                className="w-full p-5 text-left flex items-center justify-between font-bold text-sm sm:text-base text-zinc-200 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl active:scale-[0.995]"
+                className="w-full p-5 text-left flex items-center justify-between font-bold text-sm sm:text-base text-zinc-200 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-2xl active:scale-[0.995]"
               >
                 <span className="flex items-center gap-3">
-                  <span className={`text-xs font-mono font-semibold transition-colors ${isOpen ? 'text-blue-400' : 'text-zinc-500'}`}>
+                  <span className={`text-xs font-mono font-semibold transition-colors ${isOpen ? 'text-cyan-400' : 'text-zinc-500'}`}>
                     0{idx + 1}
                   </span>
                   <span>{item.question}</span>
                 </span>
-                <div className={`p-1 rounded-lg transition-colors ${isOpen ? 'bg-blue-600/20 text-blue-400' : 'text-zinc-400'}`}>
+                <div className={`p-1 rounded-lg transition-colors ${isOpen ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-400'}`}>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isOpen ? 'rotate-180' : 'rotate-0'

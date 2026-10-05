@@ -60,10 +60,10 @@ export const PatternPicker: React.FC<PatternPickerProps> = ({ selectedPatternId,
                 <button
                     onClick={handleRandomPattern}
                     aria-label="Pick a random pattern style"
-                    className="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs font-medium border border-zinc-800 transition-all active:scale-95 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    className="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs font-medium border border-zinc-800 transition-all active:scale-95 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
                     title="Pick a random pattern style (different from current)"
                 >
-                    <Shuffle className="w-3.5 h-3.5 text-blue-400" />
+                    <Shuffle className="w-3.5 h-3.5 text-cyan-400" />
                     <span>Randomize</span>
                 </button>
             </div>
@@ -79,15 +79,15 @@ export const PatternPicker: React.FC<PatternPickerProps> = ({ selectedPatternId,
                             key={pattern.id}
                             onClick={() => onSelectPattern(pattern.id)}
                             aria-label={`Select ${pattern.name} pattern style`}
-                            className={`flex items-start gap-2.5 p-2.5 min-h-[52px] rounded-xl border text-left transition-all duration-200 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                            className={`flex items-start gap-2.5 p-2.5 min-h-[52px] rounded-xl border text-left transition-all duration-200 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
                                 isSelected
-                                    ? "bg-blue-600/15 border-blue-500/70 text-white shadow-md shadow-blue-500/10 ring-1 ring-blue-500/30"
+                                    ? "bg-cyan-500/15 border-cyan-500/70 text-white shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500/30"
                                     : "bg-zinc-900/60 border-zinc-800 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 hover:border-zinc-700"
                             }`}
                         >
                             <div
                                 className={`p-1.5 rounded-lg mt-0.5 shrink-0 transition-colors ${
-                                    isSelected ? "bg-blue-600 text-white shadow-sm" : "bg-zinc-800 text-zinc-300"
+                                    isSelected ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold" : "bg-zinc-800 text-zinc-300"
                                 }`}
                             >
                                 {icon}

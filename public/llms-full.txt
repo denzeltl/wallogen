@@ -1,0 +1,61 @@
+# Wallogen — Full Technical & Mathematical Specification
+
+## System Overview
+
+Wallogen is a zero-dependency, privacy-first web application designed for procedural wallpaper generation.
+
+- **Stack:** Next.js 14 (App Router), TypeScript, Tailwind CSS, HTML5 Canvas 2D.
+- **Privacy Model:** 100% Client-Side. No network calls or backend processing are required to render or export wallpapers.
+
+## Render Engine Architecture
+
+The rendering pipeline relies on a pure deterministic function contract:
+
+```ts
+type RenderWallpaper = (
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  patternId: string,
+  palette: Palette,
+  params: PatternParams
+) => void;
+```
+
+### Registered Pattern Renderers (14 Total)
+
+1. **Ocean Waves (`waves`)**: Layered sine/cosine mathematical wave vectors with frequency, amplitude, phase shifts, and vertical stacking.
+2. **Soft Gradients (`gradients`)**: Multi-stop linear, radial, and conic color blending gradients.
+3. **Mesh Aura (`meshGradients`)**: Organic Gaussian color blobs positioned via Mulberry32 PRNG with radial falloff blur.
+4. **Architectural Arcs (`arcs`)**: Minimalist geometric celestial arcs, overlapping hills, and sun/moon shapes.
+5. **Topography Contours (`topography`)**: Elevation contour line art vectors using 2D Value Noise fields.
+6. **Bauhaus Geometry (`geometric`)**: Floating polygons, concentric rings, triangles, and grid overlays.
+7. **Liquid Silk (`silkFlow`)**: Procedural flow field ribbon vectors driven by multi-octave 2D Value Noise.
+8. **Cosmic Noise Fields (`noiseFields`)**: Multi-frequency Perlin/Simplex noise clouds, plasma fields, and nebula light gradients.
+9. **Voronoi Cellular (`voronoi`)**: Geometric stained glass and crystal structure Voronoi tessellations with radial cell fills.
+10. **Curved Line Art (`stripes`)**: Precision parallel line ribbons with wave modulation and varying stroke weights.
+11. **Halftone Dot Grid (`dotGrid`)**: Procedural dot matrices with distance-based sine wave radius modulation.
+12. **Orbital Rings (`layeredCircles`)**: Concentric rings, floating orbital spheres, and celestial balance compositions.
+13. **Northern Lights (`aurora`)**: Vertical light curtains with flowing wave boundaries and glowing light passes.
+14. **Prism Geometry (`kaleidoscope`)**: Radiating crystalline geometry with multi-symmetry radial petals and polygon facets.
+
+## Device Target Presets
+
+- **4K Desktop:** 3840 × 2160 (16:9)
+- **QHD Desktop:** 2560 × 1440 (16:9)
+- **Ultrawide:** 3440 × 1440 (21:9)
+- **8K Ultra:** 7680 × 4320 (16:9)
+- **iPhone 15 Pro:** 1290 × 2796 (19.5:9)
+- **Android Flagship:** 1440 × 3120 (19.5:9)
+- **iPad Pro:** 2048 × 2732 (4:3)
+- **Square 1:1:** 2048 × 2048 (1:1)
+- **Custom Pixels:** User-defined Width × Height (320px to 8192px).
+
+## Technical Export Math
+
+Wallogen exports wallpapers by rendering offscreen onto an unmounted DOM `<canvas>` element at full native resolution:
+
+1. A detached canvas is created: `document.createElement('canvas')`.
+2. Dimensions are allocated to target native pixels (e.g. 3840×2160).
+3. The engine invokes `renderWallpaper()` at native scale.
+4. The canvas exports via `canvas.toBlob('image/png')` or `canvas.toBlob('image/jpeg', 0.95)` and triggers a native browser file download.
