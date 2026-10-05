@@ -8,8 +8,11 @@ import { validateAiConfig } from './validate';
  * API key never reaches the browser bundle.
  */
 
-// The "-latest" alias tracks Google's current free-tier Flash-Lite model.
-const DEFAULT_MODEL = 'gemini-flash-lite-latest';
+const FALLBACK_MODELS = [
+  'gemini-2.5-flash',
+  'gemini-1.5-flash',
+  'gemini-2.0-flash',
+];
 
 const SYSTEM_INSTRUCTION = `You are the art director of Wallogen, a minimalist wallpaper generator.
 The user describes a wallpaper. You cannot draw pictures: you choose ONE procedural pattern and its settings
@@ -45,7 +48,7 @@ const RESPONSE_SCHEMA = {
     patternId: { type: Type.STRING, enum: PATTERN_IDS },
     mode: { type: Type.STRING, enum: ['dark', 'light'] },
     background: { type: Type.STRING, description: 'Hex colour like #1a2b3c' },
-    colors: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: '3', maxItems: '5' },
+    colors: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 3, maxItems: 5 },
     scale: { type: Type.NUMBER },
     density: { type: Type.INTEGER },
     complexity: { type: Type.INTEGER },
@@ -92,8 +95,11 @@ export class AiGenerationError extends Error {
 let client: GoogleGenAI | null = null;
 
 function getClient(): GoogleGenAI | null {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return null;
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) {
+    console.warn('[ai] GEMINI_API_KEY is missing or empty in process.env');
+    return null;
+  }
   client ??= new GoogleGenAI({ apiKey });
   return client;
 }
@@ -128,27 +134,38 @@ export async function generateWallpaperConfig(prompt: string): Promise<AiWallpap
   const ai = getClient();
   if (!ai) throw new AiGenerationError('unavailable');
 
+  const modelsToTry = Array.from(
+    new Set([process.env.GEMINI_MODEL, ...FALLBACK_MODELS].filter((m): m is string => Boolean(m && m.trim())))
+  );
+
   let text: string | undefined;
-  try {
-    const response = await ai.models.generateContent({
-      model: process.env.GEMINI_MODEL || DEFAULT_MODEL,
-      contents: prompt,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: 'application/json',
-        responseSchema: RESPONSE_SCHEMA,
-        temperature: 0.8,
-        maxOutputTokens: 1024,
-        abortSignal: AbortSignal.timeout(12_000),
-      },
-    });
-    text = response.text;
-  } catch (err) {
-    console.error('[ai] Gemini request failed:', err instanceof Error ? err.message : err);
-    throw toGenerationError(err);
+  let lastError: unknown;
+
+  for (const model of modelsToTry) {
+    try {
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+          responseMimeType: 'application/json',
+          responseSchema: RESPONSE_SCHEMA,
+          temperature: 0.8,
+          maxOutputTokens: 1024,
+          abortSignal: AbortSignal.timeout(12_000),
+        },
+      });
+      text = response.text;
+      if (text) break;
+    } catch (err) {
+      lastError = err;
+      console.error(`[ai] Gemini request failed with model "${model}":`, err instanceof Error ? err.message : err);
+    }
   }
 
-  if (!text) throw new AiGenerationError('unavailable');
+  if (!text) {
+    throw toGenerationError(lastError);
+  }
 
   let parsed: Record<string, unknown>;
   try {

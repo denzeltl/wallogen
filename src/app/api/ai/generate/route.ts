@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
     const config = await generateWallpaperConfig(prompt);
     return reply({ ok: true, config }, 200);
   } catch (err) {
+    console.error('[api/ai/generate] Error during generation:', err);
     if (err instanceof AiGenerationError) {
       const status = err.reason === 'unavailable' ? 503 : 429;
       return reply({ ok: false, reason: err.reason, retryAfterSeconds: err.retryAfterSeconds }, status);
