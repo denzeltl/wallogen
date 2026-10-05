@@ -1,6 +1,6 @@
 # Wallogen — Minimalist Procedural Wallpaper Generator
 
-> Wallogen is a minimalist, high-resolution wallpaper generator web application. It runs 100% client-side inside the browser using HTML5 Canvas 2D and vector mathematics. No sign-up, zero data collection, zero image uploads.
+> Wallogen is a minimalist, high-resolution wallpaper generator web application. It runs 100% client-side inside the browser using HTML5 Canvas 2D and vector mathematics. No sign-up, no tracking, zero image uploads. An optional AI prompt bar sends only the user's text description to Google Gemini to choose a pattern, palette and settings; rendering stays in the browser.
 
 ## Core Capabilities
 

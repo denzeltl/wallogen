@@ -20,7 +20,8 @@ It allows users to generate crisp, aesthetically refined wallpapers for 4K/8K de
   - **Custom Dimensions:** User-defined width & height up to 8192px.
 - ⚡ **100% Client-Side Offscreen Export:** Native high-DPI PNG and JPG downloads rendered directly in the browser via an offscreen HTML5 Canvas.
 - 📱 **Interactive Studio Playground:** Live dual-display preview with real-time parameter tuning (seed, scale, density, complexity, film grain, and rotation angle).
-- 🔒 **Privacy First:** Zero data collection, zero uploads, and no sign-up required.
+- ✨ **Describe a Wallpaper (AI):** Type a mood like *"calm ocean at dusk"* and Google Gemini picks the pattern, palette and settings. The engine still renders locally, so AI results stay sharp at 8K and fully editable. Falls back to an on-device keyword match when the free AI quota is used up.
+- 🔒 **Privacy First:** No accounts, no tracking, zero image uploads. The only thing that ever leaves your browser is the text prompt, and only when you use the AI prompt bar.
 
 ---
 
@@ -61,6 +62,16 @@ It allows users to generate crisp, aesthetically refined wallpapers for 4K/8K de
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+### Optional: enable the AI prompt bar
+
+The "Describe a wallpaper" feature uses Google's free Gemini API tier. Without a key, it still works using an on-device keyword match.
+
+1. Create a free API key at [Google AI Studio](https://aistudio.google.com/apikey).
+2. Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY`. `GEMINI_MODEL` is optional.
+3. Restart `npm run dev`. On Vercel, add the same variables under **Project → Settings → Environment Variables**.
+
+The key is only read by the server route `src/app/api/ai/generate/route.ts`. Never prefix it with `NEXT_PUBLIC_`.
 
 ---
 

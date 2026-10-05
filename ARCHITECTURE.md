@@ -96,6 +96,25 @@ Provides curated color combinations and utilities:
 * Seeded random palette generator.
 * Custom user palette manager.
 
+### 2.5. AI Prompt-to-Wallpaper (`/src/lib/ai`, `/src/app/api/ai/generate`)
+The AI picks settings; it never draws. See [ADR 0001](docs/adr/0001-ai-prompt-to-wallpaper-config.md).
+
+```mermaid
+flowchart LR
+    Prompt["AiPromptBar (text prompt)"] --> Client["lib/ai/client.ts"]
+    Client -->|"POST /api/ai/generate"| Route["Route Handler (Node)"]
+    Route --> Limit["rateLimit.ts (per-IP)"]
+    Limit --> Gemini["gemini.ts → Google Gemini (structured JSON)"]
+    Gemini --> Validate["validate.ts (clamp to PARAM_RANGES, repair hex)"]
+    Validate --> Client
+    Client -->|"quota used up / busy / offline"| Fallback["fallback.ts (on-device keyword match)"]
+    Client --> State["pattern + palette + params state"] --> Engine["Canvas engine (preview & 4K/8K export)"]
+```
+
+* **Server boundary:** `gemini.ts` is only imported by the route, so `GEMINI_API_KEY` never reaches the browser bundle.
+* **Soft limits:** quota/rate-limit errors return `429 { reason: 'daily_limit' | 'busy', retryAfterSeconds }`. The client stores a cooldown in `localStorage`, skips the network until it expires, and shows a soft notice alongside an on-device close match.
+* **Catalog:** `catalog.ts` builds the model's pattern list from the `PATTERNS` registry plus `PATTERN_MOODS`, so new patterns are picked up automatically.
+
 ---
 
 ## 3. Directory Structure
@@ -109,6 +128,8 @@ wallogen/
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx        # Root layout, fonts, SEO metadata
+│   │   ├── api/ai/generate/
+│   │   │   └── route.ts      # Only server code: prompt → Gemini → validated config
 │   │   ├── page.tsx          # Landing page showcasing app & how it works
 │   │   └── generate/
 │   │       └── page.tsx      # Main Wallpaper Generator Application
@@ -137,6 +158,7 @@ wallogen/
 │   │   │   │   ├── arcs.ts
 │   │   │   │   └── topography.ts
 │   │   │   └── noise.ts      # Grain / noise post-processor
+│   │   ├── ai/               # Prompt → wallpaper config (catalog, gemini, validate, fallback, client)
 │   │   ├── palettes/         # Color palettes database & helpers
 │   │   ├── devices.ts        # Screen resolutions & device presets
 │   │   └── store.ts          # Application state store
@@ -156,4 +178,4 @@ wallogen/
 
 1. **Resolution Independence:** All pattern math uses relative coordinates ($x / \text{width}$, $y / \text{height}$) or scaled stroke widths relative to canvas diagonal so pattern proportion remains consistent whether rendered at 800px or 7680px.
 2. **Noise Overlay Optimization:** Noise textures use pre-computed small noise tiles or deterministic pseudo-random generators to avoid heavy `getImageData` performance bottlenecks on high-DPI canvases.
-3. **Zero-Server Dependencies:** Complete app runs client-side, making deployment cost-free on Vercel / GitHub Pages / Cloudflare Pages.
+3. **Minimal Server Surface:** All rendering and export runs client-side. The single server route (`/api/ai/generate`) only handles the optional AI prompt bar, so the app needs a Node-capable host such as Vercel. Static hosts still serve everything except AI, which falls back to on-device matching.

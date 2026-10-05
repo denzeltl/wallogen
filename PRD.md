@@ -45,6 +45,11 @@ Inspired by clean, minimalist design principles (e.g., WLLPR), Wallogen offers i
 * **High-Resolution Export Engine:**
   * One-click export to PNG / JPEG format rendered offscreen at native target resolution (up to 8K) without pixelation or quality loss.
   * SVG vector export option for applicable geometric patterns.
+* **Describe a Wallpaper (AI):**
+  * Prompt bar where users describe a mood or scene; Google Gemini (free tier) picks the pattern, palette and parameters, rendered locally at full resolution.
+  * Example prompt chips, "New variation" (local reseed), "Reinterpret" (new AI call), and Undo.
+  * Respects locked sliders.
+  * When the free AI quota is used up or the AI is unavailable, shows a soft, friendly notice and produces an on-device keyword-based close match, so the button always returns a wallpaper.
 
 ### 3.2. Landing Page & Marketing Experience
 * **Hero Section:**
@@ -64,7 +69,7 @@ Inspired by clean, minimalist design principles (e.g., WLLPR), Wallogen offers i
 
 ## 4. Non-Functional Requirements
 * **Performance:** Real-time canvas render updates under 50ms during parameter tweaks. Offscreen export completed under 1.5 seconds for 4K resolutions.
-* **Privacy & Security:** 100% client-side generation. No images, telemetry, or personal data transmitted to any backend server.
+* **Privacy & Security:** 100% client-side generation. No images or telemetry are transmitted. The only exception is the optional AI prompt bar, which sends the text prompt (≤200 chars) to Google Gemini and discloses this in the UI and FAQ.
 * **Responsiveness:** Flawless layout adaptivity across desktop monitors, laptops, tablets, and smartphones.
 * **Accessibility (a11y):** Keyboard navigation support, aria-labels for interactive sliders, and high contrast UI controls.
 * **SEO & Metadata:** OpenGraph images, Twitter cards, meta descriptions, and structured data for high search engine visibility.

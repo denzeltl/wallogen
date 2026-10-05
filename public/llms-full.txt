@@ -5,7 +5,8 @@
 Wallogen is a zero-dependency, privacy-first web application designed for procedural wallpaper generation.
 
 - **Stack:** Next.js 14 (App Router), TypeScript, Tailwind CSS, HTML5 Canvas 2D.
-- **Privacy Model:** 100% Client-Side. No network calls or backend processing are required to render or export wallpapers.
+- **Privacy Model:** 100% client-side rendering. No network calls or backend processing are required to render or export wallpapers.
+- **AI Prompt Bar (optional):** `POST /api/ai/generate` sends only the user's text prompt to Google Gemini (free tier), which returns a structured config (`patternId`, palette, scale/density/complexity/noise/rotation). The config is validated, clamped to slider ranges, and rendered locally by the same Canvas engine. When the AI is unavailable or the free quota is exhausted, an on-device keyword matcher produces a close match instead.
 
 ## Render Engine Architecture
 

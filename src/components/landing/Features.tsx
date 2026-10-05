@@ -6,7 +6,7 @@ export const Features: React.FC = () => {
     {
       num: '01',
       title: 'Client-Side Canvas 2D Engine',
-      description: 'Zero data uploads or server tracking. All vector geometry is procedurally generated 100% inside your web browser.',
+      description: 'Zero image uploads or tracking. All vector geometry is procedurally generated 100% inside your web browser.',
       tag: 'HTML5 Canvas',
     },
     {

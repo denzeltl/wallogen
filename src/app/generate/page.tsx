@@ -18,6 +18,7 @@ export default function GeneratorPage() {
     const [presetId, setPresetId] = useState<string>(DEFAULT_DEVICE_PRESET.id);
     const [customWidth, setCustomWidth] = useState<number>(1920);
     const [customHeight, setCustomHeight] = useState<number>(1080);
+    const [isAiGenerating, setIsAiGenerating] = useState(false);
 
     const [params, setParams] = useState<PatternParams>({
         seed: 42,
@@ -95,6 +96,7 @@ export default function GeneratorPage() {
                     targetWidth={targetWidth}
                     targetHeight={targetHeight}
                     onSelectPreset={setPresetId}
+                    isGenerating={isAiGenerating}
                 />
 
                 <ControlsPanel
@@ -115,6 +117,7 @@ export default function GeneratorPage() {
                     }}
                     onChangeParams={setParams}
                     onExport={handleExport}
+                    onAiBusyChange={setIsAiGenerating}
                 />
             </main>
         </div>

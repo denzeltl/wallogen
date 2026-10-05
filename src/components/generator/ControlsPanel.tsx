@@ -7,6 +7,9 @@ import { getRandomPalette } from "@/lib/palettes";
 import { PatternPicker } from "./PatternPicker";
 import { PaletteSelector } from "./PaletteSelector";
 import { ResolutionPicker } from "./ResolutionPicker";
+import { AiPromptBar } from "./AiPromptBar";
+import { AiResult } from "@/lib/ai/client";
+import { PARAM_RANGES, TunableParam } from "@/lib/engine/params";
 import { Slider } from "@/components/ui/Slider";
 import { Download, RotateCcw, Dices, Shuffle, Layers, Sliders, Palette as PaletteIcon, Monitor } from "lucide-react";
 import confetti from "canvas-confetti";
@@ -26,6 +29,13 @@ interface ControlsPanelProps {
     onChangeCustomDimensions: (w: number, h: number) => void;
     onChangeParams: (newParams: PatternParams) => void;
     onExport: (format: "png" | "jpeg") => Promise<void>;
+    onAiBusyChange: (busy: boolean) => void;
+}
+
+interface WallpaperSnapshot {
+    patternId: string;
+    palette: Palette;
+    params: PatternParams;
 }
 
 type TabType = "patterns" | "tuning" | "colors" | "screen";
@@ -45,6 +55,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
     onChangeCustomDimensions,
     onChangeParams,
     onExport,
+    onAiBusyChange,
 }) => {
     const [activeTab, setActiveTab] = useState<TabType>("patterns");
     const [isExporting, setIsExporting] = useState(false);
@@ -106,6 +117,37 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
         });
     };
 
+    const [undoSnapshot, setUndoSnapshot] = useState<WallpaperSnapshot | null>(null);
+
+    // Apply an AI (or close-match) result, keeping any slider the user has locked
+    const handleApplyAi = ({ config }: AiResult) => {
+        setUndoSnapshot({ patternId, palette, params });
+        const keep = (key: TunableParam, value: number) => (lockedParams[key] ? params[key] : value);
+
+        onSelectPattern(config.patternId);
+        onSelectPalette({ id: `ai_${Date.now()}`, name: config.title, ...config.palette });
+        onChangeParams({
+            seed: keep("seed", Math.floor(Math.random() * PARAM_RANGES.seed.max) + 1),
+            scale: keep("scale", config.params.scale),
+            density: keep("density", config.params.density),
+            complexity: keep("complexity", config.params.complexity),
+            noiseIntensity: keep("noiseIntensity", config.params.noiseIntensity),
+            rotation: keep("rotation", config.params.rotation),
+        });
+    };
+
+    const handleUndoAi = () => {
+        if (!undoSnapshot) return;
+        onSelectPattern(undoSnapshot.patternId);
+        onSelectPalette(undoSnapshot.palette);
+        onChangeParams(undoSnapshot.params);
+        setUndoSnapshot(null);
+    };
+
+    const handleNewVariation = () => {
+        onChangeParams({ ...params, seed: Math.floor(Math.random() * PARAM_RANGES.seed.max) + 1 });
+    };
+
     const handleExportClick = async () => {
         try {
             setIsExporting(true);
@@ -138,6 +180,14 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                     </button>
                 </div>
             </div>
+
+            <AiPromptBar
+                canUndo={undoSnapshot !== null}
+                onApply={handleApplyAi}
+                onUndo={handleUndoAi}
+                onNewVariation={handleNewVariation}
+                onBusyChange={onAiBusyChange}
+            />
 
             {/* Top Segmented Icon Tab Switcher */}
             <div className="px-3 py-2 border-b border-zinc-800/80 bg-zinc-900/40 shrink-0">
@@ -237,9 +287,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             <Slider
                                 label="Seed"
                                 value={params.seed}
-                                min={1}
-                                max={99999}
-                                step={1}
+                                min={PARAM_RANGES.seed.min}
+                                max={PARAM_RANGES.seed.max}
+                                step={PARAM_RANGES.seed.step}
                                 displayValue={String(params.seed)}
                                 isLocked={lockedParams.seed}
                                 onToggleLock={() => toggleParamLock("seed")}
@@ -248,9 +298,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             <Slider
                                 label="Scale"
                                 value={params.scale}
-                                min={0.4}
-                                max={3.0}
-                                step={0.1}
+                                min={PARAM_RANGES.scale.min}
+                                max={PARAM_RANGES.scale.max}
+                                step={PARAM_RANGES.scale.step}
                                 displayValue={`${params.scale.toFixed(1)}x`}
                                 isLocked={lockedParams.scale}
                                 onToggleLock={() => toggleParamLock("scale")}
@@ -259,9 +309,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             <Slider
                                 label="Density / Elements"
                                 value={params.density}
-                                min={2}
-                                max={40}
-                                step={1}
+                                min={PARAM_RANGES.density.min}
+                                max={PARAM_RANGES.density.max}
+                                step={PARAM_RANGES.density.step}
                                 displayValue={String(params.density)}
                                 isLocked={lockedParams.density}
                                 onToggleLock={() => toggleParamLock("density")}
@@ -270,9 +320,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             <Slider
                                 label="Complexity"
                                 value={params.complexity}
-                                min={1}
-                                max={10}
-                                step={1}
+                                min={PARAM_RANGES.complexity.min}
+                                max={PARAM_RANGES.complexity.max}
+                                step={PARAM_RANGES.complexity.step}
                                 displayValue={String(params.complexity)}
                                 isLocked={lockedParams.complexity}
                                 onToggleLock={() => toggleParamLock("complexity")}
@@ -281,9 +331,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             <Slider
                                 label="Film Grain Noise"
                                 value={params.noiseIntensity}
-                                min={0}
-                                max={0.3}
-                                step={0.01}
+                                min={PARAM_RANGES.noiseIntensity.min}
+                                max={PARAM_RANGES.noiseIntensity.max}
+                                step={PARAM_RANGES.noiseIntensity.step}
                                 displayValue={`${Math.round(params.noiseIntensity * 100)}%`}
                                 isLocked={lockedParams.noiseIntensity}
                                 onToggleLock={() => toggleParamLock("noiseIntensity")}
@@ -292,9 +342,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             <Slider
                                 label="Angle / Rotation"
                                 value={params.rotation}
-                                min={0}
-                                max={360}
-                                step={15}
+                                min={PARAM_RANGES.rotation.min}
+                                max={PARAM_RANGES.rotation.max}
+                                step={PARAM_RANGES.rotation.step}
                                 displayValue={`${params.rotation}°`}
                                 isLocked={lockedParams.rotation}
                                 onToggleLock={() => toggleParamLock("rotation")}

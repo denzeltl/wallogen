@@ -2,7 +2,7 @@
 
 ## 1. Core Engineering Principles
 
-1. **Client-Side Pure Canvas:** All wallpaper rendering happens in the browser canvas. Never introduce server-side canvas generation dependencies.
+1. **Client-Side Pure Canvas:** All wallpaper rendering happens in the browser canvas. Never introduce server-side canvas generation dependencies. The only server code is `/api/ai/generate`, which returns *settings* (pattern, palette, params), never pixels ([ADR 0001](docs/adr/0001-ai-prompt-to-wallpaper-config.md)).
 2. **Relative Coordinates:** Always express coordinates as ratios of `width` and `height` ($x \cdot w$, $y \cdot h$) to ensure identical visual output across 720p preview and 8K export.
 3. **Immutability & Determinism:** Given the same `seed`, `palette`, and `params`, `render()` must produce 100% identical pixel output every single time.
 4. **Zero-Lag UI Interaction:** Canvas redraws triggered by range sliders must complete under 16ms (60 FPS) on the preview canvas.

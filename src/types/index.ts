@@ -45,6 +45,28 @@ export interface WallpaperPattern {
   ) => void;
 }
 
+/**
+ * Wallpaper settings produced by the AI (or the local keyword fallback)
+ * from a text prompt. The seed is never part of it: it is assigned client-side.
+ */
+export interface AiWallpaperConfig {
+  title: string;
+  rationale: string;
+  patternId: string;
+  palette: {
+    mode: ColorMode;
+    background: string;
+    colors: string[];
+  };
+  params: Omit<PatternParams, 'seed' | 'customOptions'>;
+}
+
+export type AiFailureReason = 'daily_limit' | 'busy' | 'unavailable' | 'invalid_prompt';
+
+export type AiGenerateResponse =
+  | { ok: true; config: AiWallpaperConfig }
+  | { ok: false; reason: AiFailureReason; retryAfterSeconds?: number };
+
 export interface WallpaperState {
   patternId: string;
   paletteId: string;

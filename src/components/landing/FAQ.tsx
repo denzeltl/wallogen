@@ -17,7 +17,11 @@ export const FAQ: React.FC = () => {
     },
     {
       question: 'Are my wallpapers uploaded or saved on any server?',
-      answer: 'No. All rendering and export logic happens 100% client-side directly inside your web browser. No graphics or data are ever transmitted to an external server.',
+      answer: 'No. All rendering and export logic happens 100% client-side directly inside your web browser. Your wallpapers and images are never uploaded anywhere.',
+    },
+    {
+      question: 'How does "Describe a wallpaper" (AI) work, and what gets sent?',
+      answer: "When you type a description, only that text is sent to Google's Gemini API, which picks a pattern, colors, and settings. Your browser then renders the wallpaper locally, so it stays sharp at 4K and 8K and you can keep tweaking it. We use Gemini's free tier, where Google may use prompts to improve its products, so please don't include personal information. If the free daily AI allowance runs out, Wallogen makes a close match from your words on-device instead.",
     },
     {
       question: 'Can I use Wallogen wallpapers for commercial projects or streams?',

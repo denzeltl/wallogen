@@ -13,6 +13,7 @@ interface CanvasViewportProps {
   targetWidth: number;
   targetHeight: number;
   onSelectPreset?: (presetId: string) => void;
+  isGenerating?: boolean;
 }
 
 export const CanvasViewport: React.FC<CanvasViewportProps> = ({
@@ -22,6 +23,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   targetWidth,
   targetHeight,
   onSelectPreset,
+  isGenerating = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [deviceFrame, setDeviceFrame] = useState<'none' | 'desktop' | 'mobile'>('none');
@@ -201,6 +203,16 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
                   isLightBg ? 'bg-black/70' : 'bg-white/70'
                 }`}
               />
+            )}
+
+            {/* AI generation overlay */}
+            {isGenerating && (
+              <div className="absolute inset-0 z-30 flex items-center justify-center bg-zinc-950/45 backdrop-blur-[2px] pointer-events-none">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-medium text-zinc-200 shadow-lg">
+                  <span className="w-3 h-3 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin motion-reduce:animate-none" />
+                  Designing your wallpaper…
+                </div>
+              </div>
             )}
 
             {/* Single Persistent Canvas */}
