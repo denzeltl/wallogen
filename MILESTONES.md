@@ -106,7 +106,7 @@ This document tracks the phased development roadmap for Wallogen. Each milestone
     - [x] Updated `ARCHITECTURE.md` (§2.5 + directory tree + server note), `ARCHITECTURE-ESSENTIALS.md` principle #1 and the PRD feature list. Marked ADR 0001 Accepted.
   - **6.5: Quality check**
     - [x] `src/lib/ai/__fixtures__/prompts.json` has 20 prompts, including non-English, vague, injection and out-of-range requests
-    - [x] All 20 fixtures and several hostile "model outputs" (bad hex, unknown pattern, NaN, `<script>`) produce valid, in-range configs through the validator and fallback
+    - [x] Comprehensive automated test suite created with Vitest + React Testing Library (7 test files, 31 tests passing across validator, fallback, rate limiter, client, API route handler, component, and 20 prompt fixtures)
     - [ ] Run the fixtures against live Gemini with a real key and review the visuals
 * **Verification:**
   - [x] `npx tsc --noEmit`, `npm run lint` and `npm run build` pass. Gemini code and the system prompt appear only in `.next/server`, not `.next/static`.
