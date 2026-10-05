@@ -86,7 +86,9 @@ export const Hero: React.FC = () => {
             {/* Technical Engine Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono text-zinc-300 bg-zinc-900/90 border border-zinc-800 mb-8 backdrop-blur-md">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="font-semibold text-zinc-200">14 Procedural Engines</span>
+                <span className="font-semibold text-zinc-200">18 Procedural Engines</span>
+                <span className="text-zinc-600">•</span>
+                <span className="text-cyan-400 font-semibold flex items-center gap-1"><Sparkles className="w-3.5 h-3.5" /> AI Prompt Powered</span>
                 <span className="text-zinc-600">•</span>
                 <span className="text-zinc-400">Native 4K & Mobile HTML5 Canvas</span>
             </div>
@@ -98,8 +100,7 @@ export const Hero: React.FC = () => {
 
             {/* Subtitle */}
             <p className="mt-6 text-base sm:text-lg text-zinc-300 max-w-2xl text-center leading-relaxed font-normal">
-                Generate razor-sharp minimalist backgrounds for 4K desktop monitors, ultrawide setups, iPhones, and
-                Android devices in real time. Zero sign-up, zero ads.
+                Describe any scene (e.g. <span className="text-cyan-300 font-medium">&quot;frosted glass prism&quot;</span>, <span className="text-cyan-300 font-medium">&quot;volumetric light rays&quot;</span>, <span className="text-cyan-300 font-medium">&quot;aurora over arctic snow&quot;</span>) or explore 18 procedural vector engines in real time. Zero sign-up, zero ads.
             </p>
 
             {/* Primary Action Buttons */}

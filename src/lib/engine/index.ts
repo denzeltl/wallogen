@@ -13,9 +13,13 @@ import { dotGridPattern } from './patterns/dotGrid';
 import { layeredCirclesPattern } from './patterns/layeredCircles';
 import { auroraPattern } from './patterns/aurora';
 import { kaleidoscopePattern } from './patterns/kaleidoscope';
+import { origamiPeaksPattern } from './patterns/origamiPeaks';
+import { flowFieldPattern } from './patterns/flowField';
+import { glassmorphismPattern } from './patterns/glassmorphism';
+import { lightRaysPattern } from './patterns/lightRays';
 
 /**
- * Array of all registered wallpaper pattern engines
+ * Array of all registered wallpaper pattern engines (18 sleek engines)
  */
 export const PATTERNS: WallpaperPattern[] = [
   wavesPattern,
@@ -32,6 +36,10 @@ export const PATTERNS: WallpaperPattern[] = [
   layeredCirclesPattern,
   auroraPattern,
   kaleidoscopePattern,
+  origamiPeaksPattern,
+  flowFieldPattern,
+  glassmorphismPattern,
+  lightRaysPattern,
 ];
 
 /**

@@ -9,6 +9,7 @@ import { ArrowRight, Monitor, Smartphone } from "lucide-react";
 interface ShowcaseItem {
     id: string;
     title: string;
+    promptText?: string;
     patternId: string;
     paletteId: string;
     type: "desktop" | "mobile";
@@ -18,51 +19,57 @@ interface ShowcaseItem {
 const SHOWCASE_ITEMS: ShowcaseItem[] = [
     {
         id: "1",
-        title: "Ocean Sine Waves",
-        patternId: "waves",
-        paletteId: "tokyo_night",
+        title: "Frosted Glass Prism 4K",
+        promptText: "translucent frosted glass panels with ambient glow",
+        patternId: "glassmorphism",
+        paletteId: "pastel_sunset",
         type: "desktop",
         resolution: "4K Desktop (3840×2160)",
     },
     {
         id: "2",
-        title: "Aurora Phone Lockscreen",
-        patternId: "aurora",
-        paletteId: "cyberpunk_dark",
+        title: "Volumetric Light Shafts",
+        promptText: "misty volumetric light rays through dark atmosphere",
+        patternId: "lightRays",
+        paletteId: "deep_space",
         type: "desktop",
         resolution: "iPhone 15 Pro (1179×2556)",
     },
     {
         id: "3",
-        title: "Prism Geometry 4K",
-        patternId: "kaleidoscope",
-        paletteId: "dracula_neon",
+        title: "Alpine Origami Peaks",
+        promptText: "snowy low-poly mountain peaks at Nordic dawn",
+        patternId: "origamiPeaks",
+        paletteId: "nord_light",
         type: "desktop",
         resolution: "Ultrawide 5K (5120×1440)",
     },
     {
         id: "4",
-        title: "Nordic Snow Topography",
-        patternId: "topography",
-        paletteId: "nord_light",
+        title: "Cosmic Quantum Currents",
+        promptText: "fluid vector flow field through deep space nebula",
+        patternId: "flowField",
+        paletteId: "cyberpunk_dark",
         type: "desktop",
         resolution: "Android Flagship (1440×3088)",
     },
     {
         id: "5",
-        title: "Liquid Silk Flow Field",
-        patternId: "silkFlow",
-        paletteId: "deep_space",
+        title: "Soft Mesh Aura",
+        promptText: "pastel glowing mesh gradient, soft dreamy blur",
+        patternId: "meshGradients",
+        paletteId: "tokyo_night",
         type: "desktop",
         resolution: "4K Studio (3840×2160)",
     },
     {
         id: "6",
-        title: "Voronoi Phone Background",
-        patternId: "voronoi",
-        paletteId: "gruvbox_dark",
+        title: "Arctic Aurora Curtains",
+        promptText: "ethereal aurora lights over polar night sky",
+        patternId: "aurora",
+        paletteId: "dracula_neon",
         type: "desktop",
-        resolution: "Mobile Portrait (1080×2400)",
+        resolution: "Mobile Lockscreen (1080×2400)",
     },
 ];
 
@@ -119,16 +126,23 @@ const CanvasCard: React.FC<{ item: ShowcaseItem }> = ({ item }) => {
                 </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex flex-col justify-between gap-2">
                 <div>
                     <h3 className="font-bold text-sm text-zinc-100 group-hover:text-cyan-400 transition-colors">
                         {item.title}
                     </h3>
-                    <span className="text-xs text-zinc-400 font-mono mt-0.5 block">{palette.name} Palette</span>
+                    {item.promptText && (
+                        <p className="text-xs text-cyan-300/80 font-mono mt-0.5 block truncate">
+                            Prompt: &quot;{item.promptText}&quot;
+                        </p>
+                    )}
                 </div>
-                <span className="text-[10px] font-mono text-zinc-300 bg-zinc-800/80 group-hover:bg-cyan-500/20 group-hover:text-cyan-300 group-hover:border-cyan-500/40 px-2.5 py-1 rounded-md border border-zinc-700/50 transition-all whitespace-nowrap">
-                    {item.resolution}
-                </span>
+                <div className="flex items-center justify-between pt-1">
+                    <span className="text-xs text-zinc-400 font-mono">{palette.name}</span>
+                    <span className="text-[10px] font-mono text-zinc-300 bg-zinc-800/80 group-hover:bg-cyan-500/20 group-hover:text-cyan-300 group-hover:border-cyan-500/40 px-2.5 py-1 rounded-md border border-zinc-700/50 transition-all whitespace-nowrap">
+                        {item.resolution}
+                    </span>
+                </div>
             </div>
         </Link>
     );
@@ -140,7 +154,7 @@ export const Gallery: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
                 <div>
                     <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold mb-2 block">
-                        Curated Styles
+                        Curated Styles & AI Prompt Results
                     </span>
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                         Infinite Procedural Variations.

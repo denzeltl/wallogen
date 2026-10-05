@@ -1,5 +1,4 @@
 import React from 'react';
-import { Cpu, ShieldCheck, Monitor, Sparkles, Layers, Lock, Zap } from 'lucide-react';
 
 export const Features: React.FC = () => {
   const specs = [
@@ -17,15 +16,15 @@ export const Features: React.FC = () => {
     },
     {
       num: '03',
-      title: '14 Procedural Engines',
-      description: 'Infinite mathematical variations spanning Sine Waves, Gaussian Mesh, Contour Topography, Silk Flow Fields, and Voronoi Cells.',
+      title: '18 Procedural Engines',
+      description: 'Infinite mathematical variations spanning Frosted Glass Prisms, Volumetric Light Rays, Mesh Aura, Aurora Curtains, Origami Peaks, Silk Flow Fields, and Sine Waves.',
       tag: 'Procedural Art',
     },
     {
       num: '04',
-      title: 'Zero Ads, Free Forever',
-      description: 'No paywalls, subscription pop-ups, or mandatory accounts. Voluntary creator support via Buy Me a Coffee.',
-      tag: 'Creator Built',
+      title: 'AI Prompt Art Director',
+      description: 'Describe any scene like "red house at dusk", "neon tokyo", or "calm dune". Gemini translates your words into crisp editable vector wallpapers.',
+      tag: 'AI Powered',
     },
   ];
 

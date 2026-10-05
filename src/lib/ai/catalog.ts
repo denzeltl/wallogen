@@ -12,7 +12,7 @@ export const PATTERN_MOODS: Record<string, string[]> = {
   meshGradients: ['glow', 'aura', 'dreamy', 'blur', 'mesh', 'blob', 'pastel', 'haze', 'warm light'],
   arcs: ['mountain', 'hill', 'horizon', 'sunset', 'sunrise', 'landscape', 'dune', 'desert', 'valley'],
   topography: ['map', 'terrain', 'contour', 'topographic', 'elevation', 'hiking', 'forest', 'nature'],
-  geometric: ['shape', 'geometric', 'bauhaus', 'polygon', 'architecture', 'modern', 'balance', 'abstract'],
+  geometric: ['shape', 'geometric', 'bauhaus', 'polygon', 'architecture', 'modern', 'balance', 'abstract', 'structure', 'house', 'building'],
   silkFlow: ['silk', 'fluid', 'ribbon', 'wind', 'smoke', 'flowing', 'fabric', 'elegant'],
   noiseFields: ['space', 'galaxy', 'nebula', 'cosmic', 'cloud', 'plasma', 'storm', 'universe', 'stars'],
   voronoi: ['crystal', 'glass', 'stained', 'cell', 'mosaic', 'ice', 'shattered', 'gem'],
@@ -21,6 +21,10 @@ export const PATTERN_MOODS: Record<string, string[]> = {
   layeredCircles: ['planet', 'moon', 'orbit', 'ring', 'circle', 'sun', 'eclipse', 'celestial'],
   aurora: ['aurora', 'northern lights', 'curtain', 'polar', 'arctic', 'night sky', 'ethereal'],
   kaleidoscope: ['flower', 'mandala', 'kaleidoscope', 'symmetry', 'bloom', 'petal', 'snowflake'],
+  origamiPeaks: ['origami', 'mountain', 'peaks', 'alps', 'ridge', 'low poly mountain', 'faceted terrain', 'pyramid'],
+  flowField: ['flow field', 'vector', 'fluid', 'particle', 'magnetic', 'current', 'energy', 'vortex', 'stream'],
+  glassmorphism: ['glass', 'prism', 'frosted', 'mac', 'apple', 'translucent', 'ambient', 'panel', 'sleek'],
+  lightRays: ['light', 'rays', 'beam', 'sunbeam', 'volumetric', 'mist', 'haze', 'atmosphere', 'sunlight'],
 };
 
 /**

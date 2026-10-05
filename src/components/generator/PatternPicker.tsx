@@ -18,6 +18,10 @@ import {
     SunMedium,
     Sparkle,
     Shuffle,
+    Activity,
+    Triangle,
+    Square,
+    Sun,
 } from "lucide-react";
 
 interface PatternPickerProps {
@@ -40,6 +44,10 @@ const PATTERN_ICONS: Record<string, React.ReactNode> = {
     layeredCircles: <Disc className="w-3.5 h-3.5" />,
     aurora: <SunMedium className="w-3.5 h-3.5" />,
     kaleidoscope: <Sparkle className="w-3.5 h-3.5" />,
+    origamiPeaks: <Triangle className="w-3.5 h-3.5" />,
+    flowField: <Activity className="w-3.5 h-3.5" />,
+    glassmorphism: <Square className="w-3.5 h-3.5" />,
+    lightRays: <Sun className="w-3.5 h-3.5" />,
 };
 
 export const PatternPicker: React.FC<PatternPickerProps> = ({ selectedPatternId, onSelectPattern }) => {

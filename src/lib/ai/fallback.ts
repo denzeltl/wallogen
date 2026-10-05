@@ -21,7 +21,7 @@ const PALETTE_KEYWORDS: Record<string, string[]> = {
   pastel_sunset: ['sunset', 'sunrise', 'pastel', 'dreamy', 'peach', 'soft', 'orange'],
   sahara_gold: ['desert', 'sand', 'gold', 'dune', 'beige', 'sahara', 'earth', 'summer'],
   matcha_latte: ['forest', 'green', 'nature', 'leaf', 'matcha', 'jungle', 'spring', 'moss', 'tree'],
-  rose_blossom: ['rose', 'pink', 'love', 'blossom', 'sakura', 'cherry', 'romantic', 'flower'],
+  rose_blossom: ['rose', 'pink', 'red', 'crimson', 'ruby', 'scarlet', 'love', 'blossom', 'sakura', 'cherry', 'romantic', 'flower'],
 };
 
 const DARK_WORDS = ['dark', 'night', 'black', 'midnight', 'moody', 'shadow'];
