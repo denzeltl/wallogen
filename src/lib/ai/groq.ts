@@ -3,7 +3,13 @@ import { buildParamGuide, buildPatternCatalog } from './catalog';
 import { validateAiConfig } from './validate';
 import { AiGenerationError } from './gemini';
 
-const DEFAULT_GROQ_MODEL = 'llama-3.1-8b-instant';
+const GROQ_MODELS = [
+  'qwen/qwen3.8-27b',
+  'openai/gpt-oss-20b',
+  'openai/gpt-oss-120b',
+  'llama-3.3-70b-versatile',
+  'llama-3.1-8b-instant',
+];
 
 const SYSTEM_INSTRUCTION = `You are the art director of Wallogen, a minimalist wallpaper generator.
 The user describes a wallpaper. You cannot draw pictures: you choose ONE procedural pattern and its settings
@@ -31,47 +37,59 @@ export async function generateWallpaperConfigGroq(prompt: string): Promise<AiWal
     throw new AiGenerationError('unavailable');
   }
 
-  const model = process.env.GROQ_MODEL?.trim() || DEFAULT_GROQ_MODEL;
+  const modelsToTry = Array.from(
+    new Set([process.env.GROQ_MODEL, ...GROQ_MODELS].filter((m): m is string => Boolean(m && m.trim())))
+  );
 
-  let res: Response;
-  try {
-    res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: SYSTEM_INSTRUCTION },
-          { role: 'user', content: `Describe wallpaper for: "${prompt}"` },
-        ],
-        response_format: { type: 'json_object' },
-        temperature: 0.8,
-        max_tokens: 1024,
-      }),
-      signal: AbortSignal.timeout(10_000),
-    });
-  } catch (err) {
-    console.error('[ai/groq] Fetch error:', err instanceof Error ? err.message : err);
-    throw new AiGenerationError('unavailable');
+  let content: string | undefined;
+  let lastError: unknown;
+
+  for (const model of modelsToTry) {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: 'system', content: SYSTEM_INSTRUCTION },
+            { role: 'user', content: `Describe wallpaper for: "${prompt}"` },
+          ],
+          response_format: { type: 'json_object' },
+          temperature: 0.8,
+          max_tokens: 1024,
+        }),
+        signal: AbortSignal.timeout(10_000),
+      });
+
+      if (res.status === 429) {
+        throw new AiGenerationError('busy', 60);
+      }
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.warn(`[ai/groq] Model "${model}" failed (${res.status}):`, errText);
+        continue;
+      }
+
+      const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+      const choiceContent = data.choices?.[0]?.message?.content;
+      if (choiceContent) {
+        content = choiceContent;
+        break;
+      }
+    } catch (err) {
+      lastError = err;
+      if (err instanceof AiGenerationError) throw err;
+      console.error(`[ai/groq] Request failed with model "${model}":`, err instanceof Error ? err.message : err);
+    }
   }
 
-  if (res.status === 429) {
-    console.warn('[ai/groq] Rate limit hit (429)');
-    throw new AiGenerationError('busy', 60);
-  }
-
-  if (!res.ok) {
-    console.error(`[ai/groq] HTTP error ${res.status}:`, await res.text());
-    throw new AiGenerationError('unavailable');
-  }
-
-  const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-  const content = data.choices?.[0]?.message?.content;
   if (!content) {
-    throw new AiGenerationError('unavailable');
+    throw (lastError instanceof AiGenerationError ? lastError : new AiGenerationError('unavailable'));
   }
 
   let parsed: Record<string, unknown>;

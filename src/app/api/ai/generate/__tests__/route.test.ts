@@ -2,21 +2,34 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { POST } from '../route';
 import * as geminiModule from '@/lib/ai/gemini';
+import * as groqModule from '@/lib/ai/groq';
 import * as rateLimitModule from '@/lib/ai/rateLimit';
 import { AiWallpaperConfig } from '@/types';
 
-vi.mock('@/lib/ai/gemini', async () => {
-  const actual = await vi.importActual<typeof import('@/lib/ai/gemini')>('@/lib/ai/gemini');
-  return {
-    ...actual,
-    generateWallpaperConfig: vi.fn(),
-  };
-});
+vi.mock('@/lib/ai/groq', () => ({
+  generateWallpaperConfigGroq: vi.fn(),
+}));
+
+vi.mock('@/lib/ai/gemini', () => ({
+  generateWallpaperConfig: vi.fn(),
+  AiGenerationError: class AiGenerationError extends Error {
+    constructor(public readonly reason: string, public readonly retryAfterSeconds?: number) {
+      super(reason);
+    }
+  },
+}));
 
 describe('POST /api/ai/generate', () => {
+  const originalEnv = process.env;
+
   beforeEach(() => {
-    vi.restoreAllMocks();
+    process.env = { ...originalEnv, GROQ_API_KEY: 'gsk_mock_groq_key' };
+    vi.clearAllMocks();
     vi.spyOn(rateLimitModule, 'checkRateLimit').mockReturnValue({ allowed: true });
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
   });
 
   function createReq(body: unknown, headers: Record<string, string> = {}) {
@@ -67,6 +80,7 @@ describe('POST /api/ai/generate', () => {
       params: { scale: 1, density: 8, complexity: 4, noiseIntensity: 0.05, rotation: 0 },
     };
 
+    vi.mocked(groqModule.generateWallpaperConfigGroq).mockResolvedValueOnce(sampleConfig);
     vi.mocked(geminiModule.generateWallpaperConfig).mockResolvedValueOnce(sampleConfig);
 
     const res = await POST(createReq({ prompt: 'calm ocean waves at sunset' }));
@@ -78,6 +92,9 @@ describe('POST /api/ai/generate', () => {
   });
 
   it('returns 503 on service unavailable generation error', async () => {
+    vi.mocked(groqModule.generateWallpaperConfigGroq).mockRejectedValueOnce(
+      new geminiModule.AiGenerationError('unavailable')
+    );
     vi.mocked(geminiModule.generateWallpaperConfig).mockRejectedValueOnce(
       new geminiModule.AiGenerationError('unavailable')
     );
