@@ -1,19 +1,16 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://wallogen.vercel.app';
-
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-      },
-      {
-        userAgent: ['OAI-SearchBot', 'PerplexityBot', 'Claude-SearchBot', 'GPTBot'],
-        allow: '/',
+        disallow: '/api/',
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

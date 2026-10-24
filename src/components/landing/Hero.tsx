@@ -16,37 +16,6 @@ const HERO_EXAMPLES = ["calm ocean at dusk", "neon tokyo in the rain", "snowy pe
 // Hero canvases render at CSS size with a capped pixel ratio; the generator handles full-resolution export.
 const MAX_HERO_DPR = 1.5;
 
-type Tone = "dark" | "light";
-
-// Behind the copy and dock, and behind the transparent header.
-const COPY_REGION = { top: 0.25, bottom: 1, right: 0.65 };
-const HEADER_REGION = { top: 0, bottom: 0.08, right: 1 };
-
-/**
- * Average luminance of a region of the wallpaper (fractions of the canvas), sampled on a coarse grid.
- * Light regions get dark text so the copy stays legible.
- */
-function measureTone(canvas: HTMLCanvasElement, region: { top: number; bottom: number; right: number }): Tone {
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return "dark";
-    const x0 = 0;
-    const y0 = Math.floor(canvas.height * region.top);
-    const w = Math.max(1, Math.floor(canvas.width * region.right));
-    const h = Math.max(1, Math.floor(canvas.height * region.bottom) - y0);
-    const data = ctx.getImageData(x0, y0, w, h).data;
-    const step = Math.max(1, Math.floor(Math.sqrt((w * h) / 900)));
-    let total = 0;
-    let count = 0;
-    for (let y = 0; y < h; y += step) {
-        for (let x = 0; x < w; x += step) {
-            const i = (y * w + x) * 4;
-            total += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
-            count++;
-        }
-    }
-    return total / count / 255 > 0.58 ? "light" : "dark";
-}
-
 export const Hero: React.FC = () => {
     const canvasA = useRef<HTMLCanvasElement | null>(null);
     const canvasB = useRef<HTMLCanvasElement | null>(null);
@@ -55,8 +24,6 @@ export const Hero: React.FC = () => {
     const [paletteId, setPaletteId] = useState("tokyo_night");
     const [seed, setSeed] = useState(42);
     const frontRef = useRef(0);
-    const [tone, setTone] = useState<Tone>("dark");
-    const [headerTone, setHeaderTone] = useState<Tone>("dark");
     const firstPaint = useRef(true);
     const launchPrompt = useLaunchPrompt();
 
@@ -85,8 +52,6 @@ export const Hero: React.FC = () => {
             ctx.scale(dpr, dpr);
             renderWallpaper(ctx, w, h, pattern.id, palette, { ...pattern.defaultParams, seed });
             ctx.restore();
-            setTone(measureTone(canvas, COPY_REGION));
-            setHeaderTone(measureTone(canvas, HEADER_REGION));
         },
         [pattern, palette, seed]
     );
@@ -121,14 +86,6 @@ export const Hero: React.FC = () => {
         };
     }, [front, paint, canvasRefs]);
 
-    // Shared with the header, which sits transparent over the hero.
-    useEffect(() => {
-        document.documentElement.dataset.heroTone = headerTone;
-    }, [headerTone]);
-    useEffect(() => () => {
-        delete document.documentElement.dataset.heroTone;
-    }, []);
-
     const handleShuffle = () => {
         const nextPatterns = heroPatterns.filter((p) => p.id !== patternId);
         const nextPalettes = HERO_PALETTE_IDS.filter((id) => id !== paletteId);
@@ -142,7 +99,6 @@ export const Hero: React.FC = () => {
     return (
         <section
             aria-labelledby="hero-heading"
-            data-tone={tone}
             className="hero-scope relative -mt-16 min-h-[100dvh] flex flex-col justify-end overflow-hidden"
         >
             {/* The wallpaper itself */}
@@ -157,17 +113,14 @@ export const Hero: React.FC = () => {
                     />
                 ))}
             </div>
+            {/* Fixed dark scrim: the wallpaper varies, so white copy always gets a dark backdrop */}
             <div
                 aria-hidden="true"
-                className={`absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0.6)_0%,rgba(9,9,11,0)_22%,rgba(9,9,11,0.1)_40%,rgba(9,9,11,0.9)_100%)] transition-opacity duration-700 ${
-                    tone === "light" ? "opacity-0" : "opacity-100"
-                }`}
+                className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0.7)_0%,rgba(9,9,11,0.15)_25%,rgba(9,9,11,0.45)_55%,rgba(9,9,11,0.92)_100%)]"
             />
             <div
                 aria-hidden="true"
-                className={`absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0.15)_45%,rgba(255,255,255,0.7)_100%)] transition-opacity duration-700 ${
-                    tone === "light" ? "opacity-100" : "opacity-0"
-                }`}
+                className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,9,11,0.75)_0%,rgba(9,9,11,0.4)_45%,rgba(9,9,11,0)_75%)]"
             />
 
             <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-6 sm:pb-8">
@@ -181,7 +134,7 @@ export const Hero: React.FC = () => {
                 >
                     Describe a wallpaper. Watch it draw itself.
                 </h1>
-                <p className="mt-5 sm:mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-zinc-200 hero-ink-2">
+                <p className="mt-5 sm:mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-zinc-100 hero-ink-2">
                     Type a scene in plain words and AI picks the pattern, colours and settings from 18 procedural
                     engines. Download it at your screen&apos;s exact resolution, up to 8K. Free, no sign-up.
                 </p>

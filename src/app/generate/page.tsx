@@ -75,6 +75,7 @@ export default function GeneratorPage() {
 
     return (
         <div className="min-h-screen bg-zinc-950 text-white flex flex-col md:h-screen md:overflow-hidden">
+            <h1 className="sr-only">Wallogen wallpaper generator</h1>
             {/* Header */}
             <header className="h-14 border-b border-zinc-800/80 px-4 flex items-center justify-between bg-zinc-950/90 backdrop-blur-md z-30 shrink-0">
                 <div className="flex items-center gap-3">

@@ -6,7 +6,7 @@ Wallogen is a zero-dependency, privacy-first web application designed for proced
 
 - **Stack:** Next.js 14 (App Router), TypeScript, Tailwind CSS, HTML5 Canvas 2D.
 - **Privacy Model:** 100% client-side rendering. No network calls or backend processing are required to render or export wallpapers.
-- **AI Prompt Bar (optional):** `POST /api/ai/generate` sends only the user's text prompt to Google Gemini (free tier), which returns a structured config (`patternId`, palette, scale/density/complexity/noise/rotation). The config is validated, clamped to slider ranges, and rendered locally by the same Canvas engine. When the AI is unavailable or the free quota is exhausted, an on-device keyword matcher produces a close match instead.
+- **AI Prompt Bar (optional):** `POST /api/ai/generate` sends only the user's text prompt to an AI provider (Groq, with Google Gemini as a backup, both free tier), which returns a structured config (`patternId`, palette, scale/density/complexity/noise/rotation). The config is validated, clamped to slider ranges, and rendered locally by the same Canvas engine. When the AI is unavailable or the free quota is exhausted, an on-device keyword matcher produces a close match instead.
 
 ## Render Engine Architecture
 
@@ -23,7 +23,7 @@ type RenderWallpaper = (
 ) => void;
 ```
 
-### Registered Pattern Renderers (14 Total)
+### Registered Pattern Renderers (18 Total)
 
 1. **Ocean Waves (`waves`)**: Layered sine/cosine mathematical wave vectors with frequency, amplitude, phase shifts, and vertical stacking.
 2. **Soft Gradients (`gradients`)**: Multi-stop linear, radial, and conic color blending gradients.
@@ -39,6 +39,10 @@ type RenderWallpaper = (
 12. **Orbital Rings (`layeredCircles`)**: Concentric rings, floating orbital spheres, and celestial balance compositions.
 13. **Northern Lights (`aurora`)**: Vertical light curtains with flowing wave boundaries and glowing light passes.
 14. **Prism Geometry (`kaleidoscope`)**: Radiating crystalline geometry with multi-symmetry radial petals and polygon facets.
+15. **Origami Peaks (`origamiPeaks`)**: Low-poly triangular mountain peaks and crystalline terrain facets.
+16. **Vector Flow Field (`flowField`)**: Flow field particle trails and organic fluid streams.
+17. **Glass Prism (`glassmorphism`)**: Translucent frosted glass panels with soft specular edges.
+18. **Volumetric Light (`lightRays`)**: Misty light shafts and ambient light beams.
 
 ## Device Target Presets
 

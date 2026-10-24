@@ -24,7 +24,7 @@ const POINTS = [
     {
         icon: Lock,
         title: "Only your words leave the browser",
-        body: "The description goes to Google Gemini to pick a style. Rendering and downloads happen on your device.",
+        body: "The description goes to an AI provider (Groq, or Google Gemini as a backup) to pick a style. Rendering and downloads happen on your device.",
     },
     {
         icon: InfinityIcon,

@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+import { SITE_URL } from '@/lib/site';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const interTight = Inter_Tight({ subsets: ['latin'], weight: ['700', '800'], variable: '--font-inter-tight', display: 'swap' });
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-jetbrains', display: 'swap' });
 
-const siteUrl = 'https://wallogen.vercel.app';
+const siteUrl = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -52,7 +53,6 @@ export const metadata: Metadata = {
     title: 'Wallogen — Minimalist Wallpaper Generator',
     description:
       'Generate high-resolution minimalist vector wallpapers for 4K desktop and mobile devices.',
-    creator: '@wallogen',
   },
   robots: {
     index: true,

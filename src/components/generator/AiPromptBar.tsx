@@ -188,7 +188,7 @@ export const AiPromptBar: React.FC<AiPromptBarProps> = ({ canUndo, onApply, onUn
             )}
 
             <p className="text-[11px] leading-snug text-zinc-500">
-                Only your text is sent to Google Gemini to pick a style. Please don&apos;t include personal info.
+                Only your text is sent to an AI provider to pick a style. Please don&apos;t include personal info.
             </p>
         </div>
     );
