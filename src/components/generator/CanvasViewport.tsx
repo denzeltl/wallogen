@@ -84,7 +84,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-zinc-900/90 border border-zinc-800 text-[11px] sm:text-xs font-mono text-zinc-300 backdrop-blur-md">
           <span className="text-zinc-100">{targetWidth}×{targetHeight}</span>
           <span className="text-zinc-600">•</span>
-          <span className="text-cyan-400 font-semibold">
+          <span className="text-accent-400 font-semibold">
             {aspectRatio > 1.2 ? 'Landscape' : aspectRatio < 0.8 ? 'Portrait' : 'Square'}
           </span>
         </div>
@@ -96,9 +96,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
               onClick={() => handleFrameClick(f)}
               aria-label={`Preview frame: ${f}`}
               aria-pressed={deviceFrame === f}
-              className={`flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 min-h-[32px] sm:min-h-[36px] rounded-md transition-all font-medium text-[11px] sm:text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${
+              className={`flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 min-h-[32px] sm:min-h-[36px] rounded-md transition-all font-medium text-[11px] sm:text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
                 deviceFrame === f
-                  ? 'bg-cyan-500 text-zinc-950 shadow-sm font-bold'
+                  ? 'bg-accent-500 text-zinc-950 shadow-sm font-bold'
                   : 'hover:text-zinc-100 hover:bg-zinc-800/60'
               }`}
             >
@@ -209,7 +209,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             {isGenerating && (
               <div className="absolute inset-0 z-30 flex items-center justify-center bg-zinc-950/45 backdrop-blur-[2px] pointer-events-none">
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-medium text-zinc-200 shadow-lg">
-                  <span className="w-3 h-3 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin motion-reduce:animate-none" />
+                  <span className="w-3 h-3 border-2 border-accent-400/30 border-t-accent-400 rounded-full animate-spin motion-reduce:animate-none" />
                   Designing your wallpaper…
                 </div>
               </div>

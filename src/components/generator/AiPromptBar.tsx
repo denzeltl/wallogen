@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ArrowUp, Dices, Hourglass, RefreshCw, Sparkles, Undo2 } from "lucide-react";
 import { AiNotice, AiResult, describeRetry, requestAiWallpaper } from "@/lib/ai/client";
 import { MAX_PROMPT_LENGTH, MIN_PROMPT_LENGTH } from "@/lib/ai/constants";
+import { takePendingPrompt } from "@/lib/ai/handoff";
 
 interface AiPromptBarProps {
     canUndo: boolean;
@@ -67,6 +68,16 @@ export const AiPromptBar: React.FC<AiPromptBarProps> = ({ canUndo, onApply, onUn
         }
     };
 
+    // A description typed on the landing page runs as soon as the generator opens.
+    const generateRef = useRef(generate);
+    generateRef.current = generate;
+    useEffect(() => {
+        const pending = takePendingPrompt();
+        if (!pending) return;
+        setPrompt(pending);
+        void generateRef.current(pending);
+    }, []);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         void generate(prompt);
@@ -82,7 +93,7 @@ export const AiPromptBar: React.FC<AiPromptBarProps> = ({ canUndo, onApply, onUn
                 </label>
                 <Sparkles
                     aria-hidden="true"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-400 pointer-events-none"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-accent-400 pointer-events-none"
                 />
                 <input
                     id="ai-prompt"
@@ -93,13 +104,13 @@ export const AiPromptBar: React.FC<AiPromptBarProps> = ({ canUndo, onApply, onUn
                     placeholder="Describe a wallpaper…"
                     autoComplete="off"
                     enterKeyHint="go"
-                    className="w-full h-11 pl-9 pr-12 rounded-xl bg-zinc-900 border border-zinc-800 text-base sm:text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
+                    className="w-full h-11 pl-9 pr-12 rounded-xl bg-zinc-900 border border-zinc-800 text-base sm:text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-colors"
                 />
                 <button
                     type="submit"
                     disabled={!canSubmit}
                     aria-label="Generate wallpaper from description"
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-cyan-500 hover:bg-cyan-400 disabled:bg-zinc-800 disabled:text-zinc-500 text-zinc-950 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 motion-reduce:transform-none"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-accent-500 hover:bg-accent-400 disabled:bg-zinc-800 disabled:text-zinc-500 text-zinc-950 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 motion-reduce:transform-none"
                 >
                     {isLoading ? (
                         <span className="w-3.5 h-3.5 border-2 border-zinc-950/30 border-t-zinc-950 rounded-full animate-spin" />
@@ -120,7 +131,7 @@ export const AiPromptBar: React.FC<AiPromptBarProps> = ({ canUndo, onApply, onUn
                                 setPrompt(example);
                                 void generate(example);
                             }}
-                            className="shrink-0 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] text-zinc-400 hover:text-zinc-100 hover:border-cyan-500/40 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+                            className="shrink-0 min-h-[36px] px-3 rounded-full bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 [@media(hover:hover)]:hover:text-zinc-100 hover:border-accent-500/40 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
                         >
                             {example}
                         </button>
@@ -145,7 +156,7 @@ export const AiPromptBar: React.FC<AiPromptBarProps> = ({ canUndo, onApply, onUn
                 <div className="flex items-start justify-between gap-2" aria-live="polite">
                     <div className="min-w-0">
                         <p className="text-xs font-semibold text-zinc-100 truncate">
-                            <span className={result.source === "ai" ? "text-cyan-400" : "text-zinc-500"}>
+                            <span className={result.source === "ai" ? "text-accent-400" : "text-zinc-500"}>
                                 {result.source === "ai" ? "AI" : "Close match"}
                             </span>
                             <span className="text-zinc-600"> · </span>
@@ -176,7 +187,7 @@ export const AiPromptBar: React.FC<AiPromptBarProps> = ({ canUndo, onApply, onUn
                 </div>
             )}
 
-            <p className="text-[10px] leading-snug text-zinc-600">
+            <p className="text-[11px] leading-snug text-zinc-500">
                 Only your text is sent to Google Gemini to pick a style. Please don&apos;t include personal info.
             </p>
         </div>
@@ -195,7 +206,7 @@ const IconButton: React.FC<{ label: string; onClick: () => void; disabled?: bool
         disabled={disabled}
         aria-label={label}
         title={label}
-        className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-cyan-500/40 disabled:opacity-40 disabled:hover:text-zinc-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+        className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-accent-500/40 disabled:opacity-40 disabled:hover:text-zinc-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
     >
         {children}
     </button>

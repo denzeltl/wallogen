@@ -5,12 +5,21 @@
 :root {
   --background: #09090b;
   --foreground: #f4f4f5;
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* Accent scale as RGB channels so Tailwind opacity modifiers (bg-accent-500/20) keep working */
+  --accent-50: 245 243 255;
+  --accent-100: 237 233 254;
+  --accent-200: 221 214 254;
+  --accent-300: 221 214 254;
+  --accent-400: 196 181 253;
+  --accent-500: 167 139 250;
+  --accent-600: 139 92 246;
+  --accent-700: 109 40 217;
+  --font-sans: var(--font-inter), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 72px;
 }
 
@@ -40,6 +49,23 @@ body {
   background: #52525b;
 }
 
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Section reveal: content is visible by default; .reveal-ready is only added by JS when motion is allowed */
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--reveal-i, 0) * 70ms);
+}
+
+.reveal-ready [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
 /* Lenis Smooth Scroll Rules */
 html.lenis, html.lenis body {
   height: auto;
@@ -59,4 +85,43 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-smooth iframe {
   pointer-events: none;
+}
+
+/* Hero tone: the hero measures its wallpaper behind the copy (data-tone on the section) and behind the header
+   (data-hero-tone on <html>). On light regions, text and glass controls inside that scope flip to dark. */
+[data-hero-tone="light"] header.hero-scope .hero-ink,
+[data-tone="light"].hero-scope .hero-ink {
+  color: #09090b;
+}
+
+[data-hero-tone="light"] header.hero-scope .hero-ink-2,
+[data-tone="light"].hero-scope .hero-ink-2 {
+  color: #27272a;
+}
+
+[data-hero-tone="light"] header.hero-scope .hero-glass,
+[data-tone="light"].hero-scope .hero-glass {
+  color: #18181b;
+  background-color: rgb(255 255 255 / 0.55);
+  border-color: rgb(9 9 11 / 0.18);
+}
+
+[data-hero-tone="light"] header.hero-scope .hero-solid,
+[data-tone="light"].hero-scope .hero-solid {
+  color: #fafafa;
+  background-color: #09090b;
+  border-color: #09090b;
+}
+
+@media (hover: hover) {
+  [data-hero-tone="light"] header.hero-scope .hero-glass:hover,
+  [data-tone="light"].hero-scope .hero-glass:hover {
+    border-color: rgb(9 9 11 / 0.45);
+    color: #09090b;
+  }
+
+  [data-hero-tone="light"] header.hero-scope .hero-solid:hover,
+  [data-tone="light"].hero-scope .hero-solid:hover {
+    background-color: #27272a;
+  }
 }

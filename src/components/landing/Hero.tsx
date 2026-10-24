@@ -1,320 +1,258 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Monitor, Smartphone, Dices, Coffee, Sparkles, Eye, EyeOff, Layers, Check } from "lucide-react";
+import { ArrowRight, Dices, Sparkles } from "lucide-react";
 import { PATTERNS, renderWallpaper } from "@/lib/engine";
 import { CURATED_PALETTES } from "@/lib/palettes";
-import { DEVICE_PRESETS } from "@/lib/devices";
+import { PromptForm, useLaunchPrompt } from "./PromptForm";
+
+// The styles offered in the hero dock: a spread of looks that read well behind large type.
+const HERO_PATTERN_IDS = ["waves", "aurora", "meshGradients", "origamiPeaks", "lightRays", "topography"];
+const HERO_PALETTE_IDS = ["tokyo_night", "deep_space", "dracula_neon", "nord_dark", "pastel_sunset", "matcha_latte"];
+
+const HERO_EXAMPLES = ["calm ocean at dusk", "neon tokyo in the rain", "snowy peaks at sunrise", "soft pastel haze"];
+
+// Hero canvases render at CSS size with a capped pixel ratio; the generator handles full-resolution export.
+const MAX_HERO_DPR = 1.5;
+
+type Tone = "dark" | "light";
+
+// Behind the copy and dock, and behind the transparent header.
+const COPY_REGION = { top: 0.25, bottom: 1, right: 0.65 };
+const HEADER_REGION = { top: 0, bottom: 0.08, right: 1 };
+
+/**
+ * Average luminance of a region of the wallpaper (fractions of the canvas), sampled on a coarse grid.
+ * Light regions get dark text so the copy stays legible.
+ */
+function measureTone(canvas: HTMLCanvasElement, region: { top: number; bottom: number; right: number }): Tone {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return "dark";
+    const x0 = 0;
+    const y0 = Math.floor(canvas.height * region.top);
+    const w = Math.max(1, Math.floor(canvas.width * region.right));
+    const h = Math.max(1, Math.floor(canvas.height * region.bottom) - y0);
+    const data = ctx.getImageData(x0, y0, w, h).data;
+    const step = Math.max(1, Math.floor(Math.sqrt((w * h) / 900)));
+    let total = 0;
+    let count = 0;
+    for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+            const i = (y * w + x) * 4;
+            total += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+            count++;
+        }
+    }
+    return total / count / 255 > 0.58 ? "light" : "dark";
+}
 
 export const Hero: React.FC = () => {
-    const desktopCanvasRef = useRef<HTMLCanvasElement | null>(null);
-    const mobileCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const canvasA = useRef<HTMLCanvasElement | null>(null);
+    const canvasB = useRef<HTMLCanvasElement | null>(null);
+    const [front, setFront] = useState(0);
+    const [patternId, setPatternId] = useState("waves");
+    const [paletteId, setPaletteId] = useState("tokyo_night");
+    const [seed, setSeed] = useState(42);
+    const frontRef = useRef(0);
+    const [tone, setTone] = useState<Tone>("dark");
+    const [headerTone, setHeaderTone] = useState<Tone>("dark");
+    const firstPaint = useRef(true);
+    const launchPrompt = useLaunchPrompt();
 
-    const [selectedPatternId, setSelectedPatternId] = useState<string>("waves");
-    const [selectedPaletteId, setSelectedPaletteId] = useState<string>("tokyo_night");
-    const [seed, setSeed] = useState<number>(42);
-    const [showControls, setShowControls] = useState<boolean>(true);
-    const [viewMode, setViewMode] = useState<"both" | "desktop" | "mobile">("both");
+    const canvasRefs = useMemo(() => [canvasA, canvasB], []);
+    const heroPatterns = useMemo(
+        () =>
+            HERO_PATTERN_IDS.map((id) => PATTERNS.find((p) => p.id === id)).filter(
+                (p): p is NonNullable<typeof p> => Boolean(p)
+            ),
+        []
+    );
+    const pattern = PATTERNS.find((p) => p.id === patternId) ?? PATTERNS[0];
+    const palette = CURATED_PALETTES.find((p) => p.id === paletteId) ?? CURATED_PALETTES[0];
 
-    const activePattern = useMemo(() => {
-        return PATTERNS.find((p) => p.id === selectedPatternId) || PATTERNS[0];
-    }, [selectedPatternId]);
+    const paint = useCallback(
+        (canvas: HTMLCanvasElement) => {
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
+            const dpr = Math.min(window.devicePixelRatio || 1, MAX_HERO_DPR);
+            const w = canvas.clientWidth;
+            const h = canvas.clientHeight;
+            if (!w || !h) return;
+            canvas.width = Math.round(w * dpr);
+            canvas.height = Math.round(h * dpr);
+            ctx.save();
+            ctx.scale(dpr, dpr);
+            renderWallpaper(ctx, w, h, pattern.id, palette, { ...pattern.defaultParams, seed });
+            ctx.restore();
+            setTone(measureTone(canvas, COPY_REGION));
+            setHeaderTone(measureTone(canvas, HEADER_REGION));
+        },
+        [pattern, palette, seed]
+    );
 
-    const activePalette = useMemo(() => {
-        return CURATED_PALETTES.find((p) => p.id === selectedPaletteId) || CURATED_PALETTES[0];
-    }, [selectedPaletteId]);
-
-    // Render both Desktop (16:9) & Mobile (9:16) preview canvases simultaneously
+    // Each change paints the hidden canvas, then crossfades it to the front.
     useEffect(() => {
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-        // Desktop Canvas (16:9 Landscape)
-        if (desktopCanvasRef.current) {
-            const dCtx = desktopCanvasRef.current.getContext("2d");
-            if (dCtx) {
-                const dw = 960;
-                const dh = 540;
-                if (desktopCanvasRef.current.width !== dw * dpr || desktopCanvasRef.current.height !== dh * dpr) {
-                    desktopCanvasRef.current.width = dw * dpr;
-                    desktopCanvasRef.current.height = dh * dpr;
-                }
-                dCtx.save();
-                dCtx.scale(dpr, dpr);
-                renderWallpaper(dCtx, dw, dh, activePattern.id, activePalette, {
-                    ...activePattern.defaultParams,
-                    seed,
-                });
-                dCtx.restore();
-            }
+        if (firstPaint.current) {
+            firstPaint.current = false;
+            if (canvasA.current) paint(canvasA.current);
+            return;
         }
+        const back = 1 - frontRef.current;
+        const canvas = canvasRefs[back].current;
+        if (canvas) paint(canvas);
+        frontRef.current = back;
+        setFront(back);
+    }, [paint, canvasRefs]);
 
-        // Mobile Canvas (9:16 Portrait)
-        if (mobileCanvasRef.current) {
-            const mCtx = mobileCanvasRef.current.getContext("2d");
-            if (mCtx) {
-                const mw = 360;
-                const mh = 640;
-                if (mobileCanvasRef.current.width !== mw * dpr || mobileCanvasRef.current.height !== mh * dpr) {
-                    mobileCanvasRef.current.width = mw * dpr;
-                    mobileCanvasRef.current.height = mh * dpr;
-                }
-                mCtx.save();
-                mCtx.scale(dpr, dpr);
-                renderWallpaper(mCtx, mw, mh, activePattern.id, activePalette, {
-                    ...activePattern.defaultParams,
-                    seed,
-                });
-                mCtx.restore();
-            }
-        }
-    }, [activePattern, activePalette, seed, viewMode]);
+    useEffect(() => {
+        let frame = 0;
+        const onResize = () => {
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(() => {
+                const canvas = canvasRefs[front].current;
+                if (canvas) paint(canvas);
+            });
+        };
+        window.addEventListener("resize", onResize);
+        return () => {
+            cancelAnimationFrame(frame);
+            window.removeEventListener("resize", onResize);
+        };
+    }, [front, paint, canvasRefs]);
+
+    // Shared with the header, which sits transparent over the hero.
+    useEffect(() => {
+        document.documentElement.dataset.heroTone = headerTone;
+    }, [headerTone]);
+    useEffect(() => () => {
+        delete document.documentElement.dataset.heroTone;
+    }, []);
 
     const handleShuffle = () => {
-        const availablePatterns = PATTERNS.filter((p) => p.id !== selectedPatternId);
-        const randomPattern = availablePatterns[Math.floor(Math.random() * availablePatterns.length)];
-        const availablePalettes = CURATED_PALETTES.filter((p) => p.id !== selectedPaletteId);
-        const randomPalette = availablePalettes[Math.floor(Math.random() * availablePalettes.length)];
-
-        setSelectedPatternId(randomPattern.id);
-        setSelectedPaletteId(randomPalette.id);
+        const nextPatterns = heroPatterns.filter((p) => p.id !== patternId);
+        const nextPalettes = HERO_PALETTE_IDS.filter((id) => id !== paletteId);
+        setPatternId(nextPatterns[Math.floor(Math.random() * nextPatterns.length)].id);
+        setPaletteId(nextPalettes[Math.floor(Math.random() * nextPalettes.length)]);
         setSeed(Math.floor(Math.random() * 99999) + 1);
     };
 
+    const generatorHref = `/generate?pattern=${pattern.id}&palette=${palette.id}&seed=${seed}`;
+
     return (
-        <section className="relative pt-10 pb-20 px-4 sm:px-6 max-w-7xl mx-auto flex flex-col items-center">
-            {/* Technical Engine Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono text-zinc-300 bg-zinc-900/90 border border-zinc-800 mb-8 backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="font-semibold text-zinc-200">18 Procedural Engines</span>
-                <span className="text-zinc-600">•</span>
-                <span className="text-cyan-400 font-semibold flex items-center gap-1"><Sparkles className="w-3.5 h-3.5" /> AI Prompt Powered</span>
-                <span className="text-zinc-600">•</span>
-                <span className="text-zinc-400">Native 4K & Mobile HTML5 Canvas</span>
+        <section
+            aria-labelledby="hero-heading"
+            data-tone={tone}
+            className="hero-scope relative -mt-16 min-h-[100dvh] flex flex-col justify-end overflow-hidden"
+        >
+            {/* The wallpaper itself */}
+            <div className="absolute inset-0" aria-hidden="true">
+                {canvasRefs.map((ref, i) => (
+                    <canvas
+                        key={i}
+                        ref={ref}
+                        className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-out motion-reduce:duration-150 ${
+                            front === i ? "opacity-100" : "opacity-0"
+                        }`}
+                    />
+                ))}
             </div>
+            <div
+                aria-hidden="true"
+                className={`absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0.6)_0%,rgba(9,9,11,0)_22%,rgba(9,9,11,0.1)_40%,rgba(9,9,11,0.9)_100%)] transition-opacity duration-700 ${
+                    tone === "light" ? "opacity-0" : "opacity-100"
+                }`}
+            />
+            <div
+                aria-hidden="true"
+                className={`absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0.15)_45%,rgba(255,255,255,0.7)_100%)] transition-opacity duration-700 ${
+                    tone === "light" ? "opacity-100" : "opacity-0"
+                }`}
+            />
 
-            {/* Main Stark Headline */}
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white max-w-4xl text-center leading-[1.08]">
-                Minimalist Vector Wallpapers for Every Display.
-            </h1>
-
-            {/* Subtitle */}
-            <p className="mt-6 text-base sm:text-lg text-zinc-300 max-w-2xl text-center leading-relaxed font-normal">
-                Describe any scene (e.g. <span className="text-cyan-300 font-medium">&quot;frosted glass prism&quot;</span>, <span className="text-cyan-300 font-medium">&quot;volumetric light rays&quot;</span>, <span className="text-cyan-300 font-medium">&quot;aurora over arctic snow&quot;</span>) or explore 18 procedural vector engines in real time. Zero sign-up, zero ads.
-            </p>
-
-            {/* Primary Action Buttons */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                <Link
-                    href="/generate"
-                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm sm:text-base font-bold bg-cyan-500 hover:bg-cyan-400 text-zinc-950 shadow-xl shadow-cyan-500/25 hover:shadow-cyan-400/40 hover:-translate-y-0.5 transition-all duration-200 ease-out active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 motion-reduce:transform-none"
+            <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-6 sm:pb-8">
+                <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-200 hero-ink-2">
+                    <Sparkles className="h-3.5 w-3.5 text-accent-400" aria-hidden="true" />
+                    AI wallpaper generator · 4K &amp; mobile
+                </p>
+                <h1
+                    id="hero-heading"
+                    className="mt-4 max-w-4xl hero-ink font-display font-extrabold text-white text-[clamp(2.5rem,6.4vw,6.5rem)] leading-[0.92] tracking-[-0.05em]"
                 >
-                    <span>Open Generator</span>
-                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1.5 transition-transform duration-200 ease-out motion-reduce:transform-none" />
-                </Link>
-                <a
-                    href="https://buymeacoffee.com/denzeltl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 text-amber-400 hover:text-amber-300 hover:-translate-y-0.5 transition-all duration-200 ease-out active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 motion-reduce:transform-none"
-                >
-                    <Coffee className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300 ease-out motion-reduce:transform-none" />
-                    <span>Buy Me a Coffee</span>
-                </a>
-            </div>
+                    Describe a wallpaper. Watch it draw itself.
+                </h1>
+                <p className="mt-5 sm:mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-zinc-200 hero-ink-2">
+                    Type a scene in plain words and AI picks the pattern, colours and settings from 18 procedural
+                    engines. Download it at your screen&apos;s exact resolution, up to 8K. Free, no sign-up.
+                </p>
 
-            {/* Interactive Dual-Display Studio Preview Playground */}
-            <div className="mt-14 w-full max-w-5xl rounded-3xl bg-zinc-900/90 border border-zinc-800/90 shadow-2xl backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-zinc-700/80">
-                {/* Studio Control Header Toolbar */}
-                <div className="p-3.5 border-b border-zinc-800/80 bg-zinc-950/90 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    {/* Display View Mode Selector Tabs */}
+                <div className="mt-7 sm:mt-8">
+                    <PromptForm id="hero-prompt" />
+                    <div className="mt-3 flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap" aria-label="Example descriptions">
+                        {HERO_EXAMPLES.map((example) => (
+                            <button
+                                key={example}
+                                type="button"
+                                onClick={() => launchPrompt(example)}
+                                className="hero-glass shrink-0 min-h-[40px] rounded-full border border-white/15 bg-zinc-950/45 px-4 text-sm text-zinc-200 backdrop-blur-md transition-[transform,border-color,color] duration-150 [@media(hover:hover)]:hover:border-white/40 [@media(hover:hover)]:hover:text-white active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transform-none"
+                            >
+                                &ldquo;{example}&rdquo;
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-row">
+                    <Link
+                        href={generatorHref}
+                        className="hero-solid group inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-white whitespace-nowrap px-4 sm:px-6 text-sm sm:text-base font-semibold text-zinc-950 transition-[transform,background-color] duration-150 [@media(hover:hover)]:hover:bg-zinc-200 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 motion-reduce:transform-none"
+                    >
+                        <span className="sm:hidden">Open in generator</span>
+                        <span className="hidden sm:inline">Open this one in the generator</span>
+                        <ArrowRight className="hidden sm:block h-4 w-4 shrink-0 transition-transform duration-200 ease-out [@media(hover:hover)]:group-hover:translate-x-1 motion-reduce:transform-none" />
+                    </Link>
+                    <button
+                        type="button"
+                        onClick={handleShuffle}
+                        className="hero-glass group inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-white/40 bg-zinc-950/45 px-5 sm:px-6 text-sm sm:text-base font-semibold text-white backdrop-blur-md transition-[transform,border-color,background-color] duration-150 [@media(hover:hover)]:hover:border-white [@media(hover:hover)]:hover:bg-zinc-950/70 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transform-none"
+                    >
+                        <Dices className="h-5 w-5 shrink-0 transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:rotate-180 motion-reduce:transform-none" />
+                        Shuffle
+                    </button>
+                </div>
+
+                {/* Dock: switch style and read what's on screen */}
+                <div className="mt-8 sm:mt-10 flex flex-col gap-3 md:flex-row md:items-center">
                     <div
                         role="group"
-                        aria-label="Screen display mode selector"
-                        className="flex items-center bg-zinc-900 border border-zinc-800 rounded-xl p-1 gap-1"
+                        aria-label="Wallpaper style"
+                        className="flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 sm:mx-0 sm:px-0 md:flex-wrap"
                     >
-                        <button
-                            onClick={() => setViewMode("both")}
-                            aria-pressed={viewMode === "both"}
-                            aria-label="View both desktop and mobile screens"
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
-                                viewMode === "both"
-                                    ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
-                                    : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
-                            }`}
-                        >
-                            <Layers className="w-3.5 h-3.5" />
-                            <span>Dual</span>
-                            <span className="hidden sm:inline">&nbsp;Showcase</span>
-                        </button>
-                        <button
-                            onClick={() => setViewMode("desktop")}
-                            aria-pressed={viewMode === "desktop"}
-                            aria-label="View desktop monitor screen only"
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
-                                viewMode === "desktop"
-                                    ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
-                                    : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
-                            }`}
-                        >
-                            <Monitor className="w-3.5 h-3.5" />
-                            <span className="hidden sm:inline">Desktop 4K</span>
-                        </button>
-                        <button
-                            onClick={() => setViewMode("mobile")}
-                            aria-pressed={viewMode === "mobile"}
-                            aria-label="View mobile phone screen only"
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
-                                viewMode === "mobile"
-                                    ? "bg-cyan-500 text-zinc-950 shadow-sm font-bold"
-                                    : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
-                            }`}
-                        >
-                            <Smartphone className="w-3.5 h-3.5" />
-                            <span className="hidden sm:inline">Mobile Phone</span>
-                        </button>
-                    </div>
-
-                    {/* Active Pattern Metadata & Quick Controls */}
-                    <div className="flex items-center gap-2.5">
-                        <span className="text-zinc-400 font-mono hidden md:inline">
-                            {activePattern.name} • {activePalette.name}
-                        </span>
-
-                        {/* Overlays Visibility Toggle */}
-                        <button
-                            onClick={() => setShowControls(!showControls)}
-                            aria-label={showControls ? "Hide canvas badges" : "Show canvas badges"}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-xs font-medium border border-zinc-800 hover:border-zinc-700 transition-all active:scale-95"
-                        >
-                            {showControls ? (
-                                <EyeOff className="w-3.5 h-3.5 text-zinc-400" />
-                            ) : (
-                                <Eye className="w-3.5 h-3.5 text-cyan-400" />
-                            )}
-                            <span className="hidden sm:inline">{showControls ? "Hide Badges" : "Show Badges"}</span>
-                        </button>
-
-                        {/* Quick Surprise Me Button */}
-                        <button
-                            onClick={handleShuffle}
-                            aria-label="Randomize desktop and mobile live preview"
-                            className="group/btn flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs font-semibold border border-zinc-800 hover:border-cyan-500/40 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
-                        >
-                            <Dices className="w-4 h-4 text-cyan-400 group-hover/btn:rotate-180 transition-transform duration-500 ease-out" />
-                            <span>Surprise Me</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* Dual Screen Preview Area */}
-                <div className="p-6 sm:p-8 bg-zinc-950/80 border-b border-zinc-800/60 flex items-center justify-center min-h-[380px] sm:min-h-[460px]">
-                    <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-center justify-items-center">
-                        {/* Desktop Screen Mockup Frame */}
-                        {(viewMode === "both" || viewMode === "desktop") && (
-                            <div
-                                className={`w-full max-w-2xl transition-all duration-300 ${
-                                    viewMode === "both" ? "lg:col-span-8" : "lg:col-span-12 max-w-3xl"
-                                }`}
-                            >
-                                <div className="w-full rounded-2xl bg-zinc-950 p-3 sm:p-4 border-2 border-zinc-800 shadow-2xl relative group">
-                                    {/* Desktop Monitor Top Bar & Webcam */}
-                                    <div className="flex items-center justify-between px-2 pb-2.5">
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                                            <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                                            <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-                                        </div>
-                                        <div className="w-2 h-2 rounded-full bg-zinc-800" />
-                                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-zinc-400">
-                                            <Monitor className="w-3 h-3 text-cyan-400" />
-                                            <span>Desktop 4K (16:9)</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Desktop 16:9 Canvas */}
-                                    <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-black border border-zinc-900 shadow-inner">
-                                        <canvas
-                                            ref={desktopCanvasRef}
-                                            role="img"
-                                            aria-label={`Desktop live preview for ${activePattern.name}`}
-                                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.01]"
-                                        />
-
-                                        {showControls && (
-                                            <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-zinc-950/85 border border-zinc-800 text-[10px] font-mono text-cyan-400 backdrop-blur-md">
-                                                3840×2160 (4K UHD)
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Mobile Smartphone Mockup Frame */}
-                        {(viewMode === "both" || viewMode === "mobile") && (
-                            <div
-                                className={`transition-all duration-300 ${
-                                    viewMode === "both" ? "lg:col-span-4" : "lg:col-span-12"
-                                }`}
-                            >
-                                <div className="w-56 sm:w-64 rounded-[36px] bg-zinc-950 p-3 border-4 border-zinc-800 shadow-2xl relative group">
-                                    {/* Dynamic Island / Notch Pill */}
-                                    <div className="absolute top-5 left-1/2 -translate-x-1/2 w-16 h-3.5 bg-zinc-900 rounded-full z-20 border border-zinc-800 flex items-center justify-center">
-                                        <div className="w-2 h-2 rounded-full bg-zinc-950 ml-auto mr-1.5" />
-                                    </div>
-
-                                    {/* Mobile 9:16 Portrait Canvas */}
-                                    <div className="relative aspect-[9/18] w-full rounded-[28px] overflow-hidden bg-black border border-zinc-900 shadow-inner">
-                                        <canvas
-                                            ref={mobileCanvasRef}
-                                            role="img"
-                                            aria-label={`Mobile live preview for ${activePattern.name}`}
-                                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                                        />
-
-                                        {showControls && (
-                                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-zinc-950/85 border border-zinc-800 text-[10px] font-mono text-zinc-300 backdrop-blur-md whitespace-nowrap">
-                                                1170×2532 (Mobile)
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Pattern Strip Controls at Bottom */}
-                <div className="p-4 bg-zinc-950/90 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-                    <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto py-1">
-                        <span className="text-zinc-400 font-mono text-[11px] mr-1 hidden md:inline">Styles:</span>
-                        {PATTERNS.slice(0, 6).map((pattern) => {
-                            const isSelected = pattern.id === selectedPatternId;
+                        {heroPatterns.map((p) => {
+                            const active = p.id === patternId;
                             return (
                                 <button
-                                    key={pattern.id}
-                                    onClick={() => setSelectedPatternId(pattern.id)}
-                                    aria-label={`Select ${pattern.name} wallpaper pattern`}
-                                    className={`px-3 py-1.5 rounded-xl text-xs font-medium font-mono transition-all whitespace-nowrap ${
-                                        isSelected
-                                            ? "bg-cyan-500 text-zinc-950 font-bold shadow-md shadow-cyan-500/30"
-                                            : "bg-zinc-900 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 border border-zinc-800"
+                                    key={p.id}
+                                    type="button"
+                                    onClick={() => setPatternId(p.id)}
+                                    aria-pressed={active}
+                                    className={`shrink-0 min-h-[44px] rounded-full border px-4 text-sm font-medium backdrop-blur-md transition-[transform,background-color,color,border-color] duration-150 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transform-none ${
+                                        active
+                                            ? "hero-solid border-white bg-white text-zinc-950"
+                                            : "hero-glass border-white/15 bg-zinc-950/45 text-zinc-200 [@media(hover:hover)]:hover:border-white/40 [@media(hover:hover)]:hover:text-white"
                                     }`}
                                 >
-                                    {pattern.name}
+                                    {p.name}
                                 </button>
                             );
                         })}
                     </div>
-
-                    <Link
-                        href="/generate"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-bold transition-colors whitespace-nowrap"
+                    <p
+                        aria-live="polite"
+                        className="hero-ink-2 md:ml-auto font-mono text-xs uppercase tracking-wider text-zinc-300 tabular-nums"
                     >
-                        <span>Launch Generator</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                        {pattern.name} · {palette.name} · seed {seed}
+                    </p>
                 </div>
             </div>
         </section>

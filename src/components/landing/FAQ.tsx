@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, Sparkles } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { SectionHeading } from './SectionHeading';
 
 export const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -30,45 +31,37 @@ export const FAQ: React.FC = () => {
   ];
 
   return (
-    <section id="faq" className="py-20 px-4 sm:px-6 max-w-4xl mx-auto border-t border-zinc-800/60">
-      <div className="text-center mb-14">
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold mb-2 block">
-          Frequently Asked Questions
-        </span>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Everything You Need to Know.
-        </h2>
-      </div>
+    <section id="faq" className="py-24 sm:py-32 px-4 sm:px-6 max-w-7xl mx-auto border-t border-zinc-800/60">
+      <SectionHeading
+        label="FAQ"
+        title="Price, privacy, resolution and licensing."
+      />
 
-      <div className="space-y-4">
+      <div className="mt-12 border-t border-zinc-800">
         {faqItems.map((item, idx) => {
           const isOpen = openIndex === idx;
 
           return (
             <div
               key={idx}
-              className={`rounded-2xl border transition-all duration-300 ${
-                isOpen
-                  ? 'bg-zinc-900/90 border-cyan-500/30 shadow-lg shadow-cyan-500/5'
-                  : 'bg-zinc-900/50 border-zinc-800/80 hover:border-zinc-700/80 hover:bg-zinc-900/70'
-              }`}
+              data-reveal
+              style={{ '--reveal-i': idx } as React.CSSProperties}
+              className="border-b border-zinc-800"
             >
               <button
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${idx}`}
                 id={`faq-button-${idx}`}
-                className="w-full p-5 text-left flex items-center justify-between font-bold text-sm sm:text-base text-zinc-200 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-2xl active:scale-[0.995]"
+                type="button"
+                className="w-full min-h-[64px] py-5 text-left flex items-center justify-between gap-4 font-display font-bold text-lg tracking-tight text-zinc-100 [@media(hover:hover)]:hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-md"
               >
-                <span className="flex items-center gap-3">
-                  <span className={`text-xs font-mono font-semibold transition-colors ${isOpen ? 'text-cyan-400' : 'text-zinc-500'}`}>
-                    0{idx + 1}
-                  </span>
+                <span className="min-w-0">
                   <span>{item.question}</span>
                 </span>
-                <div className={`p-1 rounded-lg transition-colors ${isOpen ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-400'}`}>
+                <div className={`shrink-0 transition-colors ${isOpen ? 'text-white' : 'text-zinc-500'}`}>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    className={`w-5 h-5 transition-transform duration-300 motion-reduce:transition-none ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isOpen ? 'rotate-180' : 'rotate-0'
                     }`}
                     aria-hidden="true"
@@ -81,12 +74,12 @@ export const FAQ: React.FC = () => {
                 id={`faq-answer-${idx}`}
                 role="region"
                 aria-labelledby={`faq-button-${idx}`}
-                className={`grid transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                className={`grid transition-[grid-template-rows,opacity] duration-300 motion-reduce:transition-none ease-[cubic-bezier(0.16,1,0.3,1)] ${
                   isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                 }`}
               >
                 <div className="overflow-hidden">
-                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-zinc-800/50">
+                  <div className="pb-6 pr-10 max-w-3xl text-base text-zinc-400 leading-relaxed">
                     {item.answer}
                   </div>
                 </div>

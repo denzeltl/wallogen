@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { ArrowLeft, Coffee } from "lucide-react";
 import { WallogenLogo } from "@/components/WallogenLogo";
 import { CanvasViewport } from "@/components/generator/CanvasViewport";
 import { ControlsPanel } from "@/components/generator/ControlsPanel";
-import { DEFAULT_PATTERN, getPatternById } from "@/lib/engine";
-import { DEFAULT_PALETTE } from "@/lib/palettes";
+import { DEFAULT_PATTERN, PATTERNS, getPatternById } from "@/lib/engine";
+import { CURATED_PALETTES, DEFAULT_PALETTE } from "@/lib/palettes";
 import { DEVICE_PRESETS, DEFAULT_DEVICE_PRESET } from "@/lib/devices";
 import { PatternParams, Palette } from "@/types";
 import { exportWallpaper } from "@/lib/engine/exporter";
@@ -28,6 +28,22 @@ export default function GeneratorPage() {
         noiseIntensity: 0.05,
         rotation: 0,
     });
+
+    // Landing-page links pass ?pattern=&palette=&seed= so the visitor lands on the wallpaper they picked.
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        const queryPattern = PATTERNS.find((p) => p.id === query.get("pattern"));
+        const queryPalette = CURATED_PALETTES.find((p) => p.id === query.get("palette"));
+        const querySeed = Number(query.get("seed"));
+        if (queryPattern) {
+            setPatternId(queryPattern.id);
+            setParams({
+                ...queryPattern.defaultParams,
+                seed: Number.isInteger(querySeed) && querySeed > 0 ? querySeed : queryPattern.defaultParams.seed,
+            });
+        }
+        if (queryPalette) setPalette(queryPalette);
+    }, []);
 
     const activeDevicePreset = useMemo(() => {
         return DEVICE_PRESETS.find((p) => p.id === presetId) || DEFAULT_DEVICE_PRESET;
@@ -60,30 +76,35 @@ export default function GeneratorPage() {
     return (
         <div className="min-h-screen bg-zinc-950 text-white flex flex-col md:h-screen md:overflow-hidden">
             {/* Header */}
-            <header className="h-12 border-b border-zinc-800/80 px-4 flex items-center justify-between bg-zinc-950/90 backdrop-blur-md z-30 shrink-0">
+            <header className="h-14 border-b border-zinc-800/80 px-4 flex items-center justify-between bg-zinc-950/90 backdrop-blur-md z-30 shrink-0">
                 <div className="flex items-center gap-3">
                     <Link
                         href="/"
-                        className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors text-xs font-medium"
+                        className="inline-flex min-h-[44px] items-center gap-1.5 rounded-md px-1 text-sm font-medium text-zinc-400 transition-colors [@media(hover:hover)]:hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     >
-                        <ArrowLeft className="w-3.5 h-3.5" />
+                        <ArrowLeft className="w-4 h-4" />
                         <span className="hidden sm:inline">Home</span>
                     </Link>
                     <div className="h-3.5 w-px bg-zinc-800" />
-                    <div className="flex items-center gap-1.5">
-                        <WallogenLogo size={20} />
-                        <span className="font-bold text-xs tracking-tight">Wallogen</span>
-                    </div>
+                    <Link
+                        href="/"
+                        aria-label="Wallogen home"
+                        className="inline-flex min-h-[44px] items-center gap-2 rounded-md px-1 transition-opacity [@media(hover:hover)]:hover:opacity-80 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transform-none"
+                    >
+                        <WallogenLogo size={24} />
+                        <span className="font-display font-extrabold text-base tracking-tight">Wallogen</span>
+                    </Link>
                 </div>
 
                 <a
                     href="https://buymeacoffee.com/denzeltl"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition-all"
+                    aria-label="Buy me a coffee"
+                    className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-zinc-800 px-4 text-sm font-semibold text-amber-400 transition-[transform,border-color] duration-150 [@media(hover:hover)]:hover:border-amber-500/50 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 motion-reduce:transform-none"
                 >
-                    <Coffee className="w-3 h-3" />
-                    <span className="hidden sm:inline">Support</span>
+                    <Coffee className="w-4 h-4" />
+                    <span className="hidden sm:inline">Buy me a coffee</span>
                 </a>
             </header>
 

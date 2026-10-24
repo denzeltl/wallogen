@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const interTight = Inter_Tight({ subsets: ['latin'], weight: ['700', '800'], variable: '--font-inter-tight', display: 'swap' });
+const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-jetbrains', display: 'swap' });
 
 const siteUrl = 'https://wallogen.vercel.app';
 
@@ -10,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s | Wallogen',
   },
   description:
-    'Procedurally generate high-resolution minimalist wallpapers for 4K desktop, iPhone, Android, and tablets. 14 procedural pattern engines, 100% free, privacy-first, zero sign-up.',
+    'Procedurally generate high-resolution minimalist wallpapers for 4K desktop, iPhone, Android, and tablets. 18 procedural pattern engines, 100% free, privacy-first, zero sign-up.',
   keywords: [
     'Wallpaper Generator',
     'Minimalist Wallpapers',
@@ -41,14 +46,6 @@ export const metadata: Metadata = {
     siteName: 'Wallogen',
     locale: 'en_US',
     type: 'website',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Wallogen — Minimalist 4K & Mobile Wallpaper Generator',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -56,7 +53,6 @@ export const metadata: Metadata = {
     description:
       'Generate high-resolution minimalist vector wallpapers for 4K desktop and mobile devices.',
     creator: '@wallogen',
-    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -102,14 +98,14 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${inter.variable} ${interTight.variable} ${mono.variable}`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-zinc-950 text-zinc-100 antialiased selection:bg-blue-600 selection:text-white">
+      <body className="bg-zinc-950 text-zinc-100 antialiased selection:bg-accent-600 selection:text-white">
         {children}
       </body>
     </html>

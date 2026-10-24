@@ -5,6 +5,7 @@ import Link from "next/link";
 import { PATTERNS, renderWallpaper } from "@/lib/engine";
 import { CURATED_PALETTES } from "@/lib/palettes";
 import { ArrowRight, Monitor, Smartphone } from "lucide-react";
+import { SectionHeading } from "./SectionHeading";
 
 interface ShowcaseItem {
     id: string;
@@ -33,7 +34,7 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
         patternId: "lightRays",
         paletteId: "deep_space",
         type: "desktop",
-        resolution: "iPhone 15 Pro (1179×2556)",
+        resolution: "4K Desktop (3840×2160)",
     },
     {
         id: "3",
@@ -42,7 +43,7 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
         patternId: "origamiPeaks",
         paletteId: "nord_light",
         type: "desktop",
-        resolution: "Ultrawide 5K (5120×1440)",
+        resolution: "Ultrawide (5120×1440)",
     },
     {
         id: "4",
@@ -51,7 +52,7 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
         patternId: "flowField",
         paletteId: "cyberpunk_dark",
         type: "desktop",
-        resolution: "Android Flagship (1440×3088)",
+        resolution: "QHD (2560×1440)",
     },
     {
         id: "5",
@@ -60,7 +61,7 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
         patternId: "meshGradients",
         paletteId: "tokyo_night",
         type: "desktop",
-        resolution: "4K Studio (3840×2160)",
+        resolution: "MacBook Pro (3024×1964)",
     },
     {
         id: "6",
@@ -69,11 +70,11 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
         patternId: "aurora",
         paletteId: "dracula_neon",
         type: "desktop",
-        resolution: "Mobile Lockscreen (1080×2400)",
+        resolution: "4K Desktop (3840×2160)",
     },
 ];
 
-const CanvasCard: React.FC<{ item: ShowcaseItem }> = ({ item }) => {
+const CanvasCard: React.FC<{ item: ShowcaseItem; index: number }> = ({ item, index }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const pattern = PATTERNS.find((p) => p.id === item.patternId) || PATTERNS[0];
@@ -104,9 +105,11 @@ const CanvasCard: React.FC<{ item: ShowcaseItem }> = ({ item }) => {
 
     return (
         <Link
-            href="/generate"
-            aria-label={`Open studio with ${item.title} preset`}
-            className="group rounded-2xl p-4 bg-zinc-900/50 border border-zinc-800/80 hover:border-cyan-500/50 hover:bg-zinc-900 hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+            href={`/generate?pattern=${pattern.id}&palette=${palette.id}`}
+            aria-label={`Open ${item.title} in the generator`}
+            data-reveal
+            style={{ "--reveal-i": index % 3 } as React.CSSProperties}
+            className="group rounded-2xl p-4 bg-zinc-900/50 border border-zinc-800/80 [@media(hover:hover)]:hover:border-zinc-600 [@media(hover:hover)]:hover:bg-zinc-900 transition-[border-color,background-color,opacity,transform] duration-300 ease-out active:scale-[0.99] flex flex-col justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
         >
             {/* Uniform 16:9 aspect-video screen container across all cards */}
             <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-800/80 mb-4 bg-black flex items-center justify-center">
@@ -114,13 +117,13 @@ const CanvasCard: React.FC<{ item: ShowcaseItem }> = ({ item }) => {
                     ref={canvasRef}
                     role="img"
                     aria-label={`Wallpaper swatch for ${item.title}`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    className="w-full h-full object-cover [@media(hover:hover)]:group-hover:scale-105 transition-transform duration-500 motion-reduce:transform-none ease-out"
                 />
                 <div className="absolute top-2.5 right-2.5 font-mono text-[10px] text-zinc-200 bg-zinc-950/85 px-2.5 py-1 rounded-md border border-zinc-800 backdrop-blur-md flex items-center gap-1.5">
                     {isMobile ? (
-                        <Smartphone className="w-3 h-3 text-cyan-400" />
+                        <Smartphone className="w-3 h-3 text-accent-400" />
                     ) : (
-                        <Monitor className="w-3 h-3 text-cyan-400" />
+                        <Monitor className="w-3 h-3 text-accent-400" />
                     )}
                     <span>{pattern.name}</span>
                 </div>
@@ -128,18 +131,18 @@ const CanvasCard: React.FC<{ item: ShowcaseItem }> = ({ item }) => {
 
             <div className="flex flex-col justify-between gap-2">
                 <div>
-                    <h3 className="font-bold text-sm text-zinc-100 group-hover:text-cyan-400 transition-colors">
+                    <h3 className="font-display font-bold text-lg tracking-tight text-zinc-100">
                         {item.title}
                     </h3>
                     {item.promptText && (
-                        <p className="text-xs text-cyan-300/80 font-mono mt-0.5 block truncate">
-                            Prompt: &quot;{item.promptText}&quot;
+                        <p className="text-sm text-zinc-400 mt-1">
+                            &ldquo;{item.promptText}&rdquo;
                         </p>
                     )}
                 </div>
                 <div className="flex items-center justify-between pt-1">
-                    <span className="text-xs text-zinc-400 font-mono">{palette.name}</span>
-                    <span className="text-[10px] font-mono text-zinc-300 bg-zinc-800/80 group-hover:bg-cyan-500/20 group-hover:text-cyan-300 group-hover:border-cyan-500/40 px-2.5 py-1 rounded-md border border-zinc-700/50 transition-all whitespace-nowrap">
+                    <span className="text-xs text-zinc-500 font-mono uppercase tracking-wider">{palette.name}</span>
+                    <span className="text-[10px] font-mono text-zinc-300 bg-zinc-800/80 px-2.5 py-1 rounded-md border border-zinc-700/50 transition-all whitespace-nowrap">
                         {item.resolution}
                     </span>
                 </div>
@@ -150,29 +153,26 @@ const CanvasCard: React.FC<{ item: ShowcaseItem }> = ({ item }) => {
 
 export const Gallery: React.FC = () => {
     return (
-        <section id="gallery" className="py-20 px-4 sm:px-6 max-w-7xl mx-auto border-t border-zinc-800/60">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                <div>
-                    <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold mb-2 block">
-                        Curated Styles & AI Prompt Results
-                    </span>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                        Infinite Procedural Variations.
-                    </h2>
-                </div>
-
+        <section id="gallery" className="py-24 sm:py-32 px-4 sm:px-6 max-w-7xl mx-auto border-t border-zinc-800/60">
+            <SectionHeading
+                label="Gallery"
+                title="Six prompts, six wallpapers."
+                lede="Each card is rendered live on this page. Open one to change its seed, colours or size."
+            >
                 <Link
+                    data-reveal
+                    style={{ "--reveal-i": 2 } as React.CSSProperties}
                     href="/generate"
-                    className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 active:scale-95"
+                    className="group inline-flex min-h-[44px] shrink-0 items-center gap-2 rounded-full border border-zinc-700 px-5 text-sm font-semibold text-white transition-[transform,border-color] duration-150 [@media(hover:hover)]:hover:border-zinc-500 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transform-none"
                 >
-                    <span>Open Generator</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span>Open generator</span>
+                    <ArrowRight className="w-4 h-4 [@media(hover:hover)]:group-hover:translate-x-1 transition-transform motion-reduce:transform-none" />
                 </Link>
-            </div>
+            </SectionHeading>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {SHOWCASE_ITEMS.map((item) => (
-                    <CanvasCard key={item.id} item={item} />
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {SHOWCASE_ITEMS.map((item, i) => (
+                    <CanvasCard key={item.id} item={item} index={i} />
                 ))}
             </div>
         </section>
